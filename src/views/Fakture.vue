@@ -126,7 +126,7 @@
 
               <v-dialog ref="datumPrometa" v-model="modal" :return-value.sync="datumPrometa" persistent lazy full-width width="290px">
                 <v-text-field :rules="obaveznoPoljeRules" slot="activator" v-model="datumPrometa" label="Datum prometa" prepend-icon="event" readonly></v-text-field>
-                <v-date-picker v-model="datumPrometa" :min="danasnjiDatum" scrollable>
+                <v-date-picker v-model="datumPrometa" locale="sr-Latn-CS" :min="danasnjiDatum" scrollable>
                   <v-spacer></v-spacer>
                   <v-btn flat color="primary" @click="modal=false">Cancel</v-btn>
                   <v-btn flat color="primary" @click="$refs.datumPrometa.save(datumPrometa)">OK</v-btn>
@@ -138,7 +138,7 @@
 
               <v-dialog ref="datumValute" v-model="modal1" :return-value.sync="datumValute" persistent lazy full-width width="290px">
                 <v-text-field :rules="obaveznoPoljeRules" slot="activator" v-model="datumValute" label="Datum valute" prepend-icon="event" readonly></v-text-field>
-                <v-date-picker v-model="datumValute" :min="datumPrometa" scrollable>
+                <v-date-picker v-model="datumValute" locale="sr-Latn-CS" :min="datumPrometa" scrollable>
                   <v-spacer></v-spacer>
                   <v-btn flat color="primary" @click="modal1 = false">Cancel</v-btn>
                   <v-btn flat color="primary" @click="$refs.datumValute.save(datumValute)">OK</v-btn>

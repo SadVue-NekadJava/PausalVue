@@ -142,7 +142,7 @@ Resetovanje lozinke nije uspesno, unesite ispravan email
                 <v-text-field v-model="opisDelatnosti" :rules="obaveznoPoljeRules" label="Opis delatnosti"></v-text-field>
                 <v-dialog ref="dialog" v-model="modal" :return-value.sync="date" persistent lazy full-width width="290px">
                   <v-text-field slot="activator" :rules="obaveznoPoljeRules" v-model="date" label="Datum registracije Firme " prepend-icon="event" readonly></v-text-field>
-                  <v-date-picker v-model="date" scrollable>
+                  <v-date-picker v-model="date" locale="sr-Latn-CS" scrollable>
                     <v-spacer></v-spacer>
                     <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
                     <v-btn flat color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
