@@ -1,5 +1,12 @@
 <template>
 <div>
+
+  <v-toolbar v-if="notLogged" class="opacity elevation-15" >
+    <v-spacer></v-spacer>
+    <v-toolbar-title>Pausalac</v-toolbar-title>
+    <v-spacer></v-spacer>
+  </v-toolbar>
+
     <v-flex xs6 offset-xs2>
       <!-- **************Uspesno resetovanje sifre************** -->
   <div v-if="resetPoruka==1" class="text-xs-center  modal pa-5">
@@ -27,7 +34,7 @@ Resetovanje lozinke nije uspesno, unesite ispravan email
       </v-form>
     </v-flex>
   </v-layout>
-  <v-layout row wrap class="mt-5 pa-0" v-if="!registerUser&&!zaboravljenaSifra">
+  <v-layout row wrap class="mt-3 pa-0" v-if="!registerUser&&!zaboravljenaSifra">
     <v-flex sm6 offset-sm3 md4 offset-md4 xs10 offset-xs1 class="mt-5 text-sm-center">
 
       <!-- *****************LOGIN****************** -->
@@ -175,6 +182,7 @@ export default {
   name:'index',
   data() {
     return {
+      notLogged: true,
       resetPoruka:0,
       resetEmail: '',
       validReset: true,
@@ -339,6 +347,7 @@ export default {
           var sid = response.data.sid;
           window.localStorage.setItem("sessionid", sid);
           this.$store.commit('change');
+          this.notLogged = false;
           this.$router.push('/home');
         }
       });

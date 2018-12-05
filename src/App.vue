@@ -1,17 +1,13 @@
 <template>
   <v-app>
     <div class="wrapper">
-<v-container class="mainContainer" pa-0 >
-
-
       <router-view/>
-      <v-footer class="opacity" :fixed="fixed" app>
-      <span>&copy; {{ new Date().getFullYear() }}</span><v-flex xs4 offset-xs4>
-
-    <span >Copyright@ FLM Systems</span>  </v-flex>
-    </v-footer>
-    </v-container>
-      </div>
+        <v-footer class="" app>
+          <v-spacer></v-spacer>
+            FLM Systems &copy; {{ new Date().getFullYear() }} Copyright
+          <v-spacer></v-spacer>
+        </v-footer>
+    </div>
   </v-app>
 </template>
 
@@ -33,8 +29,9 @@ background-size: cover;
 background-repeat: no-repeat;
 background-position: center;
 background-attachment: fixed;
-width:100vw;
+/* width:100vw; */
 min-height: 100vh;
+
 
 }
 .forma {
