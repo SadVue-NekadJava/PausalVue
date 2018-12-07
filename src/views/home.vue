@@ -1,13 +1,12 @@
 <template>
 <div>
   <nav-bar />
-  <!-- <v-layout class="align-center"> -->
-  <v-layout row wrap class="justify-center green ma-3">
+  <v-layout row wrap class="justify-center white ma-3">
 
 
 
-   <v-flex  md5 lg4 class="ma-1 pa-1">
-    <v-flex class="forma pa-4 ma-1">
+   <v-flex md5 lg4 class="ma-1 pa-1">
+    <v-flex class=" pa-4 ma-1">
       <h1>Ukupan promet u poslednjih 12 meseci</h1>
       <div class="bar">
         <div class="barHealth align-center d-flex text-xs-center" :class='{barHealthRed:procenatFakturisanogMesecno>80}' :style="{width:procenatFakturisanogMesecno +'%'}">
@@ -19,7 +18,7 @@
       <p class="mt-1"><em>Promet od 8 miliona dinara</em></p>
     </v-flex>
 
-    <v-flex class="forma pa-4 ma-1">
+    <v-flex class=" pa-4 ma-1">
       <h1>Ukupan promet u kalendarskoj godini</h1>
       <div class="bar">
         <div class="barHealth align-center d-flex text-xs-center" :class='{barHealthRed:procenatFakturisanogGodisnje>80}' :style="{width:procenatFakturisanogGodisnje +'%'}">
@@ -33,30 +32,14 @@
     </v-flex>
 
     <!-- dupli probni kod  -->
-  <v-flex md6 lg7 class="ma-1 pa-1 green">
-    <v-flex class="forma pa-4 ma-1">
-      <h1>Ukupan promet u poslednjih 12 meseci</h1>
-      <div class="bar">
-        <div class="barHealth align-center" :class='{barHealthRed:procenatFakturisanogMesecno>80}' :style="{width:procenatFakturisanogMesecno +'%'}">
-          <h3 v-if="procenatFakturisanogMesecno<50">{{cifraMesecno|thousandSeparator}} RSD</h3>
-          <h2 v-if="procenatFakturisanogMesecno>=50&&procenatFakturisanogMesecno<80">{{cifraMesecno|thousandSeparator}} RSD</h2>
-          <h1 v-if="procenatFakturisanogMesecno>=80">{{cifraMesecno|thousandSeparator}} RSD</h1>
+  <v-flex row wrap md6 lg7 class="ma-1 pa-1">
+        <div lg3 class=" text-xs-center" style="background-color:green;">
+          <h1>KOMITENTI</h1>
         </div>
-      </div>
-      <p class="mt-1"><em>Promet od 8 miliona dinara</em></p>
-    </v-flex>
+        <div lg3 class=" text-xs-center" style="background-color:yellow;">
+          <h1>MESEC</h1>
+        </div>
 
-    <v-flex class="forma pa-4 ma-1">
-      <h1>Ukupan promet u kalendarskoj godini</h1>
-      <div class="bar">
-        <div class="barHealth align-center" :class='{barHealthRed:procenatFakturisanogGodisnje>80}' :style="{width:procenatFakturisanogGodisnje +'%'}">
-          <h3 v-if="procenatFakturisanogGodisnje<50">{{cifraGodisnje|thousandSeparator  }} RSD</h3>
-          <h2 v-if="procenatFakturisanogGodisnje>=50&&procenatFakturisanogGodisnje<80">{{cifraGodisnje|thousandSeparator}} RSD</h2>
-          <h1 v-if="procenatFakturisanogGodisnje>=80">{{cifraGodisnje|thousandSeparator}} RSD</h1>
-        </div>
-      </div>
-      <p class="mt-1"><em>Promet od 6 miliona dinara</em></p>
-    </v-flex>
   </v-flex>
 
   </v-layout>
