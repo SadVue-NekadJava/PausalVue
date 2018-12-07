@@ -1,33 +1,37 @@
 <template >
 <div>
 <nav-bar/>
-  <v-layout class="mt-5" row wrap>
+
+<div class=" mainPorez">
 
 
-    <v-flex class="mt-5 " md4>
+  <v-layout class="mt-5 tabColor elevation-24  pa-5" row wrap>
 
 
-      <v-flex md8>
-        <div @click="svrhaIsplateIzabrana=svrhaIsplate[0]" class="forma tabovi  pa-3 ma-2">
+    <v-flex  class="mt-2  "  md3>
+
+
+      <v-flex md11>
+        <div @click="svrhaIsplateIzabrana=svrhaIsplate[0]" class="forma tabovi  pa-3 ma-2" :class="{active:svrhaIsplateIzabrana.svrha==1}">
 
 
           <h3>Porez na prihode</h3>
         </div>
       </v-flex>
-      <v-flex md8>
-        <div @click="svrhaIsplateIzabrana=svrhaIsplate[1]" class="forma tabovi pa-3 ma-2">
+      <v-flex md11>
+        <div @click="svrhaIsplateIzabrana=svrhaIsplate[1]" class="forma tabovi pa-3 ma-2" :class="{active:svrhaIsplateIzabrana.svrha==2}">
           <h3>Doprinos za zdravstveno osiguranje</h3>
         </div>
       </v-flex>
-      <v-flex md8>
-        <div @click="svrhaIsplateIzabrana=svrhaIsplate[2]" class="forma tabovi pa-3 ma-2">
+      <v-flex md11>
+        <div @click="svrhaIsplateIzabrana=svrhaIsplate[2]" class="forma tabovi pa-3 ma-2" :class="{active:svrhaIsplateIzabrana.svrha==3}">
 
 
           <h3>Doprinos za osiguranje za slucaj nezaposlenosti</h3>
         </div>
       </v-flex>
-      <v-flex md8>
-        <div @click="svrhaIsplateIzabrana=svrhaIsplate[3]" class="forma tabovi pa-3 ma-2">
+      <v-flex md11>
+        <div @click="svrhaIsplateIzabrana=svrhaIsplate[3]" class="forma tabovi pa-3 ma-2" :class="{active:svrhaIsplateIzabrana.svrha==4}">
 
 
           <h3>Doprinos za pio</h3>
@@ -35,7 +39,7 @@
       </v-flex>
     </v-flex>
 
-    <v-flex class="forma pa-3" md8>
+    <v-flex class="forma pa-3" md9>
       <div class="uplatnica">
         <v-layout row wrap>
 
@@ -143,12 +147,13 @@
         </v-layout>
       </div>
     </v-flex>
+
   </v-layout>
-  <div class="text-xs-center">
+  <div class="text-xs-center ">
 
 
     <v-btn @click="stampaj(4)" large  class="mt-4" color="success">Stampaj sve</v-btn>
-
+</div>
   </div>
 </div>
 </template>
@@ -278,6 +283,19 @@ sacuvajIzmeneNaloga(){
 </script>
 
 <style  >
+.mainPorez{
+position:absolute;
+width: 60%;
+top:50%;
+left:50%;
+transform: translate(-50%, -50%);
+}
+
+.active{
+  background-color:black;
+  transform: scale(1.05);
+  color:white;
+}
 .unosiUplatnica{
   display: inline-block;
 width: 90%;
@@ -325,6 +343,8 @@ width: 90%;
 
 .tabovi {
   cursor: pointer;
+  border:1px solid black;
+  min-height: 101px;
 
 }
 
