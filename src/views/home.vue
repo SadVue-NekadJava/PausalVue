@@ -1,11 +1,18 @@
 <template>
-<div>
+<div >
   <nav-bar />
-  <v-layout row wrap class="justify-center white ma-3">
+  <div class="mainHome">
 
 
+  <v-layout row wrap   >
 
-   <v-flex  lg4 class="ma-1 pa-1">
+<v-flex xs8 offset-xs2  >
+
+
+<v-layout row wrap class="justify-center white mt-5 align-center">
+
+
+   <v-flex  lg5 class="ma-1 pa-1">
     <v-flex class=" pa-4 ma-1">
       <h1>Ukupan promet u poslednjih 12 meseci</h1>
       <div class="bar">
@@ -28,6 +35,7 @@
       </div>
       <p class="mt-1"><em>Promet od 6 miliona dinara</em></p>
     </v-flex>
+
     </v-flex>
 
     <!-- dupli probni kod  -->
@@ -38,10 +46,11 @@
         <v-flex xs12 lg3 class=" text-xs-center" style="background-color:yellow;">
           <h1>MESEC</h1>
         </v-flex >
-
-
+</v-layout>
+</v-flex>
   </v-layout>
 </div>
+  </div>
 </template>
 
 <script>
@@ -79,6 +88,14 @@ export default {
 </script>
 
 <style >
+.mainHome{
+position:absolute;
+width: 90%;
+top:50%;
+left:50%;
+transform: translate(-50%, -50%);
+text-align: center;
+}
 .barHealthRed {
   background-color: red !important;
   color: white;
