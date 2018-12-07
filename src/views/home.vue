@@ -5,7 +5,7 @@
 
 
 
-   <v-flex md5 lg4 class="ma-1 pa-1">
+   <v-flex  lg4 class="ma-1 pa-1">
     <v-flex class=" pa-4 ma-1">
       <h1>Ukupan promet u poslednjih 12 meseci</h1>
       <div class="bar">
@@ -32,15 +32,14 @@
     </v-flex>
 
     <!-- dupli probni kod  -->
-  <v-flex row wrap md6 lg7 class="ma-1 pa-1">
-        <div lg3 class=" text-xs-center" style="background-color:green;">
-          <h1>KOMITENTI</h1>
-        </div>
-        <div lg3 class=" text-xs-center" style="background-color:yellow;">
-          <h1>MESEC</h1>
-        </div>
 
-  </v-flex>
+        <v-flex  md3 class=" text-xs-center" style="background-color:green;">
+          <h1>KOMITENTI</h1>
+        </v-flex >
+        <v-flex lg3 class=" text-xs-center" style="background-color:yellow;">
+          <h1>MESEC</h1>
+        </v-flex >
+
 
   </v-layout>
 </div>
