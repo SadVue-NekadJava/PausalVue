@@ -17,7 +17,6 @@
       </div>
       <p class="mt-1"><em>Promet od 8 miliona dinara</em></p>
     </v-flex>
-
     <v-flex class=" pa-4 ma-1">
       <h1>Ukupan promet u kalendarskoj godini</h1>
       <div class="bar">
@@ -33,10 +32,10 @@
 
     <!-- dupli probni kod  -->
 
-        <v-flex  md3 class=" text-xs-center" style="background-color:green;">
+        <v-flex xs12  lg3 class=" text-xs-center" style="background-color:green;">
           <h1>KOMITENTI</h1>
         </v-flex >
-        <v-flex lg3 class=" text-xs-center" style="background-color:yellow;">
+        <v-flex xs12 class=" text-xs-center" style="background-color:yellow;">
           <h1>MESEC</h1>
         </v-flex >
 
