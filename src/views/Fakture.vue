@@ -3,13 +3,53 @@
   <nav-bar/>
 
   <v-form ref="form" v-model="valid">
-    <v-layout row wrap>
-      <v-flex v-if="novafaktura" class="forma pa-4" xs12 sm8 offset-sm2>
-        <v-expansion-panel popout>
-          <v-layout align-center justify-center row wrap class="mb-1">
-            <v-btn class="success mb-3 mt-0" @click="novaFakturaDugme" v-if="novafaktura">Kreiraj novu Fakturu</v-btn>
+    <div v-if="novafaktura" row wrap class="forma pa-4 mt-1" >
+          <v-layout row wrap class="mb-1">
+            <v-flex sm3>
+              <v-text-field
+                v-model="search"
+                append-icon="search"
+                label="Pretraga faktura"
+                single-line
+                autofocus="true"
+              ></v-text-field>
+            </v-flex>
+            <v-flex sm3>
+              <v-btn class="success mb-3 mt-0" @click="novaFakturaDugme" v-if="novafaktura">Kreiraj novu Fakturu</v-btn>
+            </v-flex>
           </v-layout>
-          <v-expansion-panel-content class=" listaFaktura" v-for="(faktura,index) in fakture" :key="faktura.id">
+          <v-data-table :headers="tabeleHederi.listaFaktura" :items="fakture" class="elevation-1 tabela" :search="search" item-key="redniBroj" no-data-text="Trenutno nemate fakture." no-results-text="Nema rezultata.">
+            <template slot="items" slot-scope="faktura">
+              <tr @click="faktura.expanded = !faktura.expanded" class="tabela__red" :class="{'white--text blue-grey': faktura.expanded}">
+                <td>{{ faktura.item.redniBroj }}</td>
+                <td class="text-xs-center text-truncate">{{ faktura.item.kom_naziv}}</td>
+                <td class="text-xs-center">{{ faktura.item.fak_brojFakture}}</td>
+                <td class="text-xs-center">{{ faktura.item.fak_total | thousandSeparator}}</td>
+                <td class="text-xs-center">{{ faktura.item.fak_datumIzdavanja}}</td>
+                <td class="text-xs-center">{{ faktura.item.fak_datumPrometaIspis}}</td>
+                <td class="text-xs-center">{{ faktura.item.fak_valutaIspis}}</td>
+                <td class="text-xs-center">
+                  <v-icon small @click="ukloniStavku(faktura.item)" :class="{'white--text':faktura.expanded}">
+                    delete
+                  </v-icon>
+                </td>
+                <td v-show="false" v-for="stavka in faktura.item.stavkeFakture">{{stavka.usp_naziv}}</td>
+              </tr>
+            </template>
+            <template slot="expand" slot-scope="faktura">
+              <v-data-table :headers="tabeleHederi.listaStavki" :items="faktura.item.stavkeFakture" hide-actions class="elevation-1 forma__sirina-tabele" no-data-text="Trenutno nemate fakture." no-results-text="Nema rezultata.">
+                <tr slot="items" slot-scope="stavkeFakture" class="white--text grey">
+                  <td class="text-xs-center">{{ tipSelekt[stavkeFakture.item.usp_tip].tipTekst }}</td>
+                  <td class="text-xs-center">{{ stavkeFakture.item.usp_naziv }}</td>
+                  <td class="text-xs-center">{{ stavkeFakture.item.usp_cena|thousandSeparator }}</td>
+                  <td class="text-xs-center">{{ stavkeFakture.item.usp_mera }}</td>
+                  <td class="text-xs-center">{{ stavkeFakture.item.usp_kolicina }}</td>
+                  <td class="text-xs-center">{{ stavkeFakture.item.ukupno | thousandSeparator }}</td>
+                </tr>
+              </v-data-table>
+            </template>
+          </v-data-table>
+          <!--<v-expansion-panel-content class="listaFaktura" v-for="(faktura,index) in fakture" :key="faktura.id">
             <div slot="header">
               <v-layout row wrap>
                 <v-flex xs5>
@@ -96,17 +136,14 @@
                 </v-layout>
               </v-card-text>
             </v-card>
-            <!-- BRISANJE FAKTURE -->
+            BRISANJE FAKTURE
             <div v-if="modal2" class="text-xs-center  modal pa-5">
               <h1>Da li ste sigurni da zelite da stornirate fakturu "{{odabranaFaktura.kom_naziv}}"?</h1>
               <v-btn @click="storiniranjeFakture(1)" color="warning">Da</v-btn>
               <v-btn @click="storiniranjeFakture(0)" color="secondary">Ne</v-btn>
             </div>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-flex>
-
-    </v-layout>
+          </v-expansion-panel-content>-->
+    </div>
     <v-layout row wrap>
       <v-flex xs12 class="fadeIn text-xs-center" v-if="!novafaktura">
         <v-form v-model="valid" class="forma pa-3">
@@ -182,7 +219,7 @@
 
                 <v-text-field :rules="obaveznoPoljeRules" v-model="promenljiva"></v-text-field>
               </div>
-              <v-data-table :headers="headers" :items="proizvodi" hide-actions class="elevation-1" no-data-text="Trenutno nema stavki.">
+              <v-data-table :headers="tabeleHederi.stavkeFakture" :items="proizvodi" hide-actions class="elevation-1" no-data-text="Trenutno nema stavki.">
                 <tr slot="items" slot-scope="props">
                   <td>{{ props.index+1 }}</td>
                   <td class="text-xs-center">{{ tipSelekt[props.item.tip].tipTekst }}</td>
@@ -246,44 +283,133 @@ export default {
       proizvodJedinicaMere: '',
       proizvodKolicina: '',
       proizvodJedinicnaCena: '',
-      headers: [{
-          align: 'left',
-          sortable: false,
-          width: '10px'
-        },
-        {
-          text: 'Proizvod/usluga',
-          value: "tip",
-          sortable: false
-        },
-        {
-          text: 'Naziv proizvoda',
-          value: "nazivProizvoda",
-          sortable: false
-        },
-        {
-          text: 'Jedinicna cena (RSD)',
-          value: 'jedinicnaCena'
-        },
-        {
-          text: 'Jedinica mere',
-          value: "jedinicaMere",
-          sortable: false
-        },
-        {
-          text: 'Kolicina',
-          value: 'kolicina'
-        },
-        {
-          text: 'Ukupna cena (RSD)',
-          value: 'ukupnaCena'
-        },
-        {
-          text: 'Ukloni stavku',
-          value: 'ukloniStavku',
-          sortable: false
-        }
-      ],
+      //
+      tabeleHederi: {
+        // GLAVNA TABELA NA STRANI FAKTURE
+        listaFaktura: [
+          {
+            // PRVA CELIJA U TABELI, REDNI BROJEVI
+            value: 'redniBroj',
+            align: 'center'
+          },
+          {
+            text: 'Komitent',
+            value: "kom_naziv",
+            align: 'center'
+          },
+          {
+            text: 'Broj fakture',
+            value: "fak_brojFakture",
+            align: 'center'
+          },
+          {
+            text: 'Ukupna cena (RSD)',
+            value: 'fak_total',
+            align: 'center'
+          },
+          {
+            text: 'Datum izdavanja',
+            value: 'fak_datumIzdavanja',
+            align: 'center'
+          },
+          {
+            text: 'Datum prometa',
+            value: 'fak_datumPrometa',
+            align: 'center'
+          },
+          {
+            text: 'Datum valute',
+            value: 'fak_valuta',
+            align: 'center'
+          },
+          {
+            text: 'Storniraj/Ukloni nacrt',
+            sortable: false,
+            align: 'center'
+          }
+        ],
+
+        listaStavki: [
+          {
+            text: 'Proizvod/usluga',
+            value: 'usp_tip',
+            align: 'center',
+            class: "grey white--text text--lighten-5"
+          },
+          {
+            text: 'Naziv proizvoda',
+            value: "usp_naziv",
+            align: 'center',
+            class: "grey white--text text--lighten-5"
+          },
+          {
+            text: 'Jedinicna cena (RSD)',
+            value: 'usp_cena',
+            align: 'center',
+            class: "grey white--text text--lighten-5"
+          },
+          {
+            text: 'Jedinica mere',
+            value: "usp_mera",
+            align: 'center',
+            class: "grey white--text text--lighten-5"
+          },
+          {
+            text: 'Kolicina',
+            value: 'usp_kolicina',
+            align: 'center',
+            class: "grey white--text text--lighten-5"
+          },
+          {
+            text: 'Ukupna cena (RSD)',
+            value: 'ukupno',
+            align: 'center',
+            class: "grey white--text text--lighten-5"
+          }
+        ],
+
+        stavkeFakture: [
+          {
+            align: 'left',
+            sortable: false,
+            width: '10px'
+          },
+          {
+            text: 'Proizvod/usluga',
+            value: "tip",
+            sortable: false
+          },
+          {
+            text: 'Naziv proizvoda',
+            value: "nazivProizvoda",
+            sortable: false
+          },
+          {
+            text: 'Jedinicna cena (RSD)',
+            value: 'jedinicnaCena'
+          },
+          {
+            text: 'Jedinica mere',
+            value: "jedinicaMere",
+            sortable: false
+          },
+          {
+            text: 'Kolicina',
+            value: 'kolicina'
+          },
+          {
+            text: 'Ukupna cena (RSD)',
+            value: 'ukupnaCena'
+          },
+          {
+            text: 'Ukloni stavku',
+            value: 'ukloniStavku',
+            sortable: false
+          }
+        ],
+
+
+      },
       proizvodi: [],
       ukupno: 0,
       komitenti: [],
@@ -312,12 +438,12 @@ export default {
       ],
       selektRules: [
         v => (v == 0 || v == 1) || 'Izaberite jednu od opcija'
-      ]
+      ],
+      search: ''
     }
 
   },
   methods: {
-
     izbrisiRadnuVerzijuFakture(fakId){
       axios.delete("http://837s121.mars-e1.mars-hosting.com/deleteTemplate", {
       params:{  sid: localStorage.getItem('sessionid'),
@@ -349,15 +475,20 @@ export default {
         }
       }).then(response => {
 
-        // MENJAM FORMAT DATUMA GDE POSTOJI I KONTROLISEM DA LI POSTOJI BROJ FAKTURE
-        for (var faktura of response.data.fakture) {
-          faktura.isteklaValuta = false;
+        // MENJAM FORMAT DATUMA GDE POSTOJI, KONTROLISEM DA LI POSTOJI BROJ FAKTURE I DODAJEM REDNI BROJ ZA PRVU KOLONU TABELE
+        for(var i=0; i<response.data.fakture.length; i++){
+          let faktura=response.data.fakture[i];
+          faktura.expanded=false;
+          // REDNI BROJ FAKTURE NA TABELI
+          faktura.redniBroj=i+1;
+          faktura.isteklaValuta=false;
           if (faktura.fak_status == 2) {
             if (new Date() >= new Date(faktura.fak_valuta)) {
               faktura.isteklaValuta = true;
 
             }
-          } else {
+          }
+          else {
             // RASTAVLJAM DATUM NA OSNOVU MINUSA
             faktura.fak_datumIzdavanja = faktura.fak_datumIzdavanja.split('-');
             // ISPISUJEM DATUM U FORMATU KOJI ZELIM PREKO TRENUTNOG PRIKAZA
@@ -374,10 +505,14 @@ export default {
           if (faktura.fak_brojFakture === null) {
             faktura.fak_brojFakture = 'Samo izdate fakture mogu imati broj.'
           }
+
+          // OMOGUCAVA SORTIRANJE STAVKI FAKTURA PO UKUPNOJ CENI
+          for(var stavkeFakture of faktura.stavkeFakture){
+            stavkeFakture.ukupno=stavkeFakture.usp_cena*stavkeFakture.usp_kolicina;
+          }
         }
         this.fakture = response.data.fakture;
-
-
+        console.log(this.fakture);
       });
     },
     izmeniFakturu(index) {
@@ -538,10 +673,23 @@ export default {
 }
 </script>
 <style scoped>
+
 .nevidljiviInput {
   display: none;
 }
 
+.forma{
+  width: 90vw;
+  margin: auto;
+}
+
+.tabela{
+  max-width: inherit;
+}
+
+.tabela__red:hover{
+  cursor: pointer;
+}
 
 .storno {
   color: #f10000;
