@@ -35,7 +35,7 @@
         <v-flex xs12  lg3 class=" text-xs-center" style="background-color:green;">
           <h1>KOMITENTI</h1>
         </v-flex >
-        <v-flex xs12 class=" text-xs-center" style="background-color:yellow;">
+        <v-flex xs12 lg3 class=" text-xs-center" style="background-color:yellow;">
           <h1>MESEC</h1>
         </v-flex >
 
