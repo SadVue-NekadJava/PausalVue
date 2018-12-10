@@ -30,21 +30,20 @@
     </v-flex>
     </v-flex>
 
-    <!-- dupli probni kod  -->
 
         <v-flex xs12  lg3 class="pa-4 ma-1 text-xs-center" style="background-color:white;">
           <h1>Fakture sa najvecim iznosom:</h1>
           <hr>
-          <table class="pa-4 ma-2 d-inline-block">
+          <table class="pa-1 ma-1 d-inline-block">
             <thead>
-              <th class="pa-2 ma-5">Naziv firme</th>
-              <th class="pa-2 ma-5">Broj fakture</th>
-              <th class="pa-2 ma-5">Iznos fakture</th>
+              <th class="tableCell pa-2 ma-5">Naziv firme</th>
+              <th class="tableCell pa-2 ma-5">Broj fakture</th>
+              <th class="tableCell pa-2 ma-5">Iznos fakture</th>
             </thead>
             <tr v-for="komitent in topKomitenti">
-              <td>{{ komitent.kom_naziv }}</td>
-              <td>{{ komitent.fak_brojFakture }}</td>
-              <td>{{ komitent.fak_total }}</td>
+              <td class="tableCell pa-2 ma-5">{{ komitent.kom_naziv }}</td>
+              <td class="tableCell pa-2 ma-5">{{ komitent.fak_brojFakture }}</td>
+              <td class="tableCell pa-2 ma-5 text-xs-right">{{ komitent.fak_total }}</td>
             </tr>
           </table>
         </v-flex >
@@ -52,32 +51,40 @@
           <h1>Fakturisano u poslednja tri meseca:</h1>
           <hr>
 
-          <table class="pa-4 ma-2 d-inline-block">
+          <table class="pa-1 ma-1 d-inline-block">
             <thead>
-              <th class="pa-2 ma-5">Mesec</th>
-              <th class="pa-2 ma-5">Broj izdatih faktura</th>
-              <th class="pa-2 ma-5">Iznos izdatih faktura</th>
+              <th class="tableCell pa-2 ma-5">Mesec</th>
+              <th class="tableCell pa-2 ma-5">Broj izdatih faktura</th>
+              <th class="tableCell pa-2 ma-5">Iznos izdatih faktura</th>
             </thead>
             <tr>
-              <td>{{ this.mesecIme1 }}</td>
-              <td>{{ this.ovajMesec.brojFaktura }}</td>
-              <td>{{ this.ovajMesec.total }}</td>
+              <td class="tableCell pa-2 ma-5">{{ this.mesecIme1 }}</td>
+              <td class="tableCell pa-2 ma-5">{{ this.ovajMesec.brojFaktura }}</td>
+              <td class="tableCell pa-2 ma-5 text-xs-right">{{ this.ovajMesec.total }}</td>
             </tr>
             <tr>
-              <td>{{ this.mesecIme2 }}</td>
-              <td>{{ this.prosliMesec.brojFaktura }}</td>
-              <td>{{ this.prosliMesec.total }}</td>
+              <td class="tableCell pa-2 ma-5">{{ this.mesecIme2 }}</td>
+              <td class="tableCell pa-2 ma-5">{{ this.prosliMesec.brojFaktura }}</td>
+              <td class="tableCell pa-2 ma-5 text-xs-right">{{ this.prosliMesec.total }}</td>
             </tr>
             <tr>
-              <td>{{ this.mesecIme3 }}</td>
-              <td>{{ this.pretprosliMesec.brojFaktura }}</td>
-              <td>{{ this.pretprosliMesec.total }}</td>
+              <td  class="pa-2 ma-5 tableCell">{{ this.mesecIme3 }}</td>
+              <td  class="pa-2 ma-5 tableCell">{{ this.pretprosliMesec.brojFaktura }}</td>
+              <td  class="pa-2 ma-5 tableCell text-xs-right">{{ this.pretprosliMesec.total }}</td>
             </tr>
           </table>
-<!--
-          <h3 class="pa-2 ma-4">{{ this.mesecIme1 }} - {{ this.ovajMesec.total }} - {{ this.ovajMesec.brojFaktura }}</h3>
-          <h3 class="pa-2 ma-4">{{ this.mesecIme2 }} - {{ this.prosliMesec.total }} - {{ this.prosliMesec.brojFaktura }}</h3>
-          <h3 class="pa-2 ma-4">{{ this.mesecIme3 }} - {{ this.pretprosliMesec.total }} - {{ this.pretprosliMesec.brojFaktura }}</h3> -->
+
+
+          <pie-chart
+  :ratio=procenatFakturisanogMesecno/100
+  :percent=procenatFakturisanogMesecno
+  :stroke-width=3
+  :label=procenatFakturisanogMesecno
+  label-small="aaa"
+  color=#40a070
+  :opacity=0.8
+/>
+
         </v-flex >
 
 
@@ -86,10 +93,12 @@
 </template>
 
 <script>
+import PieChart from 'vue-pie-chart/src/PieChart.vue'
 import Navbar from '@/components/navBar'
 export default {
   components: {
-    'nav-bar': Navbar
+    'nav-bar': Navbar,
+    'pie-chart': PieChart
   },
   data() {
     return {
@@ -124,6 +133,7 @@ export default {
 
   },
   mounted() {
+
     this.mesecIme1 = this.meseci[new Date().getMonth()];
     if(this.mesecIme1==0){
       this.mesecIme2 = 11;
@@ -169,7 +179,9 @@ export default {
 
 }
 
-
+.tableCell{
+  border-bottom:1px solid black;
+}
 
 .bar {
   background-color: #f5f5f5;
