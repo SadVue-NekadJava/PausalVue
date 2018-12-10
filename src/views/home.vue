@@ -1,18 +1,11 @@
 <template>
-<div >
+<div>
   <nav-bar />
-  <div class="mainHome">
+  <v-layout row wrap class="justify-center  white ma-3">
 
 
-  <v-layout row wrap   >
 
-<v-flex xs8 offset-xs2  >
-
-
-<v-layout row wrap class="justify-center white mt-5 align-center">
-
-
-   <v-flex  lg5 class="ma-1 pa-1">
+   <v-flex  lg5 class="ma-1 pa-1" style="border-right:1px solid black; border-left:1px solid black;">
     <v-flex class=" pa-4 ma-1">
       <h1>Ukupan promet u poslednjih 12 meseci</h1>
       <div class="bar">
@@ -35,22 +28,61 @@
       </div>
       <p class="mt-1"><em>Promet od 6 miliona dinara</em></p>
     </v-flex>
-
     </v-flex>
 
     <!-- dupli probni kod  -->
 
-        <v-flex xs12  lg3 class=" text-xs-center" style="background-color:green;">
-          <h1>KOMITENTI</h1>
+        <v-flex xs12  lg3 class="pa-4 ma-1 text-xs-center" style="background-color:white;">
+          <h1>Fakture sa najvecim iznosom:</h1>
+          <hr>
+          <table class="pa-4 ma-2 d-inline-block">
+            <thead>
+              <th class="pa-2 ma-5">Naziv firme</th>
+              <th class="pa-2 ma-5">Broj fakture</th>
+              <th class="pa-2 ma-5">Iznos fakture</th>
+            </thead>
+            <tr v-for="komitent in topKomitenti">
+              <td>{{ komitent.kom_naziv }}</td>
+              <td>{{ komitent.fak_brojFakture }}</td>
+              <td>{{ komitent.fak_total }}</td>
+            </tr>
+          </table>
         </v-flex >
-        <v-flex xs12 lg3 class=" text-xs-center" style="background-color:yellow;">
-          <h1>MESEC</h1>
+        <v-flex xs12 lg3 class="pa-4 ma-1 text-xs-center" style="border-right:1px solid black; border-left:1px solid black;">
+          <h1>Fakturisano u poslednja tri meseca:</h1>
+          <hr>
+
+          <table class="pa-4 ma-2 d-inline-block">
+            <thead>
+              <th class="pa-2 ma-5">Mesec</th>
+              <th class="pa-2 ma-5">Broj izdatih faktura</th>
+              <th class="pa-2 ma-5">Iznos izdatih faktura</th>
+            </thead>
+            <tr>
+              <td>{{ this.mesecIme1 }}</td>
+              <td>{{ this.ovajMesec.brojFaktura }}</td>
+              <td>{{ this.ovajMesec.total }}</td>
+            </tr>
+            <tr>
+              <td>{{ this.mesecIme2 }}</td>
+              <td>{{ this.prosliMesec.brojFaktura }}</td>
+              <td>{{ this.prosliMesec.total }}</td>
+            </tr>
+            <tr>
+              <td>{{ this.mesecIme3 }}</td>
+              <td>{{ this.pretprosliMesec.brojFaktura }}</td>
+              <td>{{ this.pretprosliMesec.total }}</td>
+            </tr>
+          </table>
+<!--
+          <h3 class="pa-2 ma-4">{{ this.mesecIme1 }} - {{ this.ovajMesec.total }} - {{ this.ovajMesec.brojFaktura }}</h3>
+          <h3 class="pa-2 ma-4">{{ this.mesecIme2 }} - {{ this.prosliMesec.total }} - {{ this.prosliMesec.brojFaktura }}</h3>
+          <h3 class="pa-2 ma-4">{{ this.mesecIme3 }} - {{ this.pretprosliMesec.total }} - {{ this.pretprosliMesec.brojFaktura }}</h3> -->
         </v-flex >
-</v-layout>
-</v-flex>
+
+
   </v-layout>
 </div>
-  </div>
 </template>
 
 <script>
@@ -64,13 +96,45 @@ export default {
       procenatFakturisanogMesecno: 0,
       cifraMesecno: 0,
       procenatFakturisanogGodisnje: 0,
-      cifraGodisnje: 0
+      cifraGodisnje: 0,
+      topKomitenti: '',
+      ovajMesec:'',
+      prosliMesec:'',
+      pretprosliMesec:'',
+      mesecIme1:'',
+      mesecIme2:'',
+      mesecIme3:'',
+      meseci:{
+        0: 'Januar',
+        1: 'Februar',
+        2: 'Mart',
+        3: 'April',
+        4: 'Maj',
+        5: 'Jun',
+        6: 'Jul',
+        7: 'Avgust',
+        8: 'Septembar',
+        9: 'Oktobar',
+        10: 'Novembar',
+        11: 'Decembar'
+      }
     }
   },
   methods: {
 
   },
   mounted() {
+    this.mesecIme1 = this.meseci[new Date().getMonth()];
+    if(this.mesecIme1==0){
+      this.mesecIme2 = 11;
+      this.mesecIme3 = 10;
+    }else if(this.mesecIme1==1){
+      this.mesecIme2 = 0;
+      this.mesecIme3 = 11;
+    }else{
+      this.mesecIme2 = this.meseci[new Date().getMonth()-1];
+      this.mesecIme3 = this.meseci[new Date().getMonth()-2];
+    }
     this.logged = this.$store.state.logged;
 
     axios.get("http://837s121.mars-e1.mars-hosting.com/annualIncome", {
@@ -82,20 +146,16 @@ export default {
       this.procenatFakturisanogMesecno = response.data.incomePercentage;
       this.procenatFakturisanogGodisnje = response.data.curYearincomePercentage;
       this.cifraGodisnje = response.data.curYearincome;
+      this.topKomitenti = response.data.topComittents;
+      this.ovajMesec = response.data.thisMonth;
+      this.prosliMesec = response.data.lastMonth;
+      this.pretprosliMesec = response.data.twoMonthsAgo;
     });
   }
 }
 </script>
 
 <style >
-.mainHome{
-position:absolute;
-width: 90%;
-top:50%;
-left:50%;
-transform: translate(-50%, -50%);
-text-align: center;
-}
 .barHealthRed {
   background-color: red !important;
   color: white;
