@@ -55,6 +55,9 @@
                 </tr>
               </v-data-table>
             </template>
+            <template slot="pageText" slot-scope="props">
+              Prikazujem {{ props.pageStart }} - {{ props.pageStop }} od {{ props.itemsLength }}
+            </template>
           </v-data-table>
           <!--<v-expansion-panel-content class="listaFaktura" v-for="(faktura,index) in fakture" :key="faktura.id">
             <div slot="header">
@@ -159,7 +162,8 @@
             <v-icon @click="novaFakturaDugme" class="iks">clear</v-icon>
           </v-layout>
           <v-layout row wrap>
-            <v-flex sm3>
+            <v-flex md3 pa-3>
+              <h1 class="faktura__naslov text-xs-left">Opis fakture</h1>
               <v-select :rules="obaveznoPoljeRules" :items="komitenti" item-text="kom_naziv" item-value="kom_id" v-model="komitentId" label=" Komitent" no-data-text="Trenutno nema stavki." light class="mb-1"></v-select>
 
               <v-dialog ref="datumPrometa" v-model="modal" :return-value.sync="datumPrometa" persistent lazy full-width width="290px" class="mb2">
@@ -192,7 +196,8 @@
               <v-text-field label="Opis" v-model="opisFakture" class="mb2"></v-text-field>
             </v-flex>
 
-            <v-flex sm9 class="pa-2">
+            <v-flex md9 class="pa-3">
+              <h1 class="faktura__naslov text-xs-left">Stavke fakture</h1>
               <v-data-table :headers="tabeleHederi.stavkeFakture" :items="proizvodi" class="elevation-1" no-data-text="Trenutno nema stavki." rows-per-page-text="Redovi po strani:">
                 <tr slot="items" slot-scope="props">
                   <td>{{ props.index+1 }}</td>
@@ -208,6 +213,9 @@
                     </v-icon>
                   </td>
                 </tr>
+                <template slot="pageText" slot-scope="props">
+                  Prikazujem {{ props.pageStart }} - {{ props.pageStop }} od {{ props.itemsLength }}
+                </template>
               </v-data-table>
               <h2 v-if="ukupno!=0" class="theme--light v-table elevation-1 text-xs-right tabela__ukupno pr-5">Ukupno: {{ukupno|thousandSeparator}}</h2>
               <v-layout row wrap class="theme--light v-table elevation-1">
@@ -516,7 +524,6 @@ export default {
           }
         }
         this.fakture = response.data.fakture;
-        console.log(this.fakture);
       });
     },
     izmeniFakturu(index) {
@@ -566,7 +573,6 @@ export default {
           cena: this.proizvodJedinicnaCena,
           ukupnaCena: this.proizvodKolicina * this.proizvodJedinicnaCena
         }
-        console.log(noviProizvod);
         this.proizvodi.push(noviProizvod);
         // DODAJEM NA UKUPNU CENU FAKTURE
         this.ukupno += this.proizvodKolicina * this.proizvodJedinicnaCena;
@@ -655,12 +661,11 @@ export default {
     }
   },
   mounted() {
+    // PREUZIMA SVE FAKTURE
     this.preuzmiFakture();
-    this.danasnjiDatum = new Date().toISOString().split('T')[0]
-    var test = this.danasnjiDatum.split('-');
-    console.log(test);
+    this.danasnjiDatum = new Date().toISOString().split('T')[0];
 
-    this.datumPrometa = new Date().toISOString().split('T')[0]
+    this.datumPrometa = new Date().toISOString().split('T')[0];
 
     axios.get("http://837s121.mars-e1.mars-hosting.com/getComittents", {
       params: {
@@ -674,12 +679,13 @@ export default {
       .then(response => {
         this.mesta = response.data.gradovi;
       });
-    // PREUZIMA SVE FAKTURE
-
   },
 }
 </script>
 <style scoped>
+.faktura__naslov{
+  font-weight: 300;
+}
 
 .nevidljiviInput {
   display: none;
