@@ -282,7 +282,7 @@ sacuvajIzmeneNaloga(){
 }
 </script>
 
-<style  >
+<style scoped>
 .mainPorez{
 position:absolute;
 width: 60%;
