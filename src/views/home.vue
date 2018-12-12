@@ -1,9 +1,9 @@
 <template>
 <div>
   <nav-bar />
-  <div class="align-center d-flex">
-  <v-layout row wrap class="justify-center white ma-3">
 
+  <v-layout row wrap class="justify-center white ma-3">
+    <div class="align-center d-flex">
 
 
    <v-flex  lg5 class="ma-1 pa-1" style="border-right:1px solid black; border-left:1px solid black;">
@@ -92,9 +92,9 @@
 
         </v-flex >
 
-
+</div>
   </v-layout>
-  </div>
+
 </div>
 </template>
 
