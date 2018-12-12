@@ -1,13 +1,15 @@
 <template>
 <div>
   <nav-bar />
-  <v-layout row wrap class="justify-center  white ma-3">
+  <v-layout row wrap class="justify-center white ma-3">
 
 
 
    <v-flex  lg5 class="ma-1 pa-1" style="border-right:1px solid black; border-left:1px solid black;">
-    <v-flex class=" pa-4 ma-1">
-      <h1>Ukupan promet u poslednjih 12 meseci</h1>
+    <v-flex class="pa-4 ma-1">
+        <h1 class="tableCell pa-3 ma-1">Ukupan promet:</h1>
+
+      <h3 class="pa-4 ma-1">Ukupan promet u poslednjih 12 meseci</h3>
       <div class="bar">
         <div class="barHealth align-center d-flex text-xs-center" :class='{barHealthRed:procenatFakturisanogMesecno>80}' :style="{width:procenatFakturisanogMesecno +'%'}">
           <h3 v-if="procenatFakturisanogMesecno<50">{{cifraMesecno|thousandSeparator}} RSD</h3>
@@ -18,7 +20,7 @@
       <p class="mt-1"><em>Promet od 8 miliona dinara</em></p>
     </v-flex>
     <v-flex class=" pa-4 ma-1">
-      <h1>Ukupan promet u kalendarskoj godini</h1>
+      <h3>Ukupan promet u kalendarskoj godini</h3>
       <div class="bar">
         <div class="barHealth align-center d-flex text-xs-center" :class='{barHealthRed:procenatFakturisanogGodisnje>80}' :style="{width:procenatFakturisanogGodisnje +'%'}">
           <h3 v-if="procenatFakturisanogGodisnje<50">{{cifraGodisnje|thousandSeparator  }} RSD</h3>
