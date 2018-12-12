@@ -28,6 +28,9 @@
       </div>
       <p class="mt-1"><em>Promet od 6 miliona dinara</em></p>
     </v-flex>
+
+    <chart :options="polar"></chart>
+
     </v-flex>
 
 
@@ -46,6 +49,9 @@
               <td class="tableCell pa-2 ma-5 text-xs-right">{{ komitent.fak_total }}</td>
             </tr>
           </table>
+
+
+
         </v-flex >
         <v-flex xs12 lg3 class="pa-4 ma-1 text-xs-center" style="border-right:1px solid black; border-left:1px solid black;">
           <h1>Fakturisano u poslednja tri meseca:</h1>
@@ -74,16 +80,14 @@
             </tr>
           </table>
 
-
-          <pie-chart
-  :ratio=procenatFakturisanogMesecno/100
-  :percent=procenatFakturisanogMesecno
-  :stroke-width=3
-  :label=procenatFakturisanogMesecno
-  label-small="aaa"
-  color=#40a070
-  :opacity=0.8
-/>
+          <vc-donut
+            background="white" foreground="lightgrey"
+            :size="200" unit="px" :thickness="60"
+            hasLegend legendPlacement="bottom"
+            :sections="sections" :total="100"
+          >
+            <h1>8 mil</h1>
+          </vc-donut>
 
         </v-flex >
 
@@ -93,15 +97,20 @@
 </template>
 
 <script>
-import PieChart from 'vue-pie-chart/src/PieChart.vue'
 import Navbar from '@/components/navBar'
+
+
 export default {
   components: {
-    'nav-bar': Navbar,
-    'pie-chart': PieChart
+    'nav-bar': Navbar
   },
   data() {
     return {
+      sections: [
+          { label: '', value: 0, color: '#20327c' },
+          { label: '', value: 0, color: '#4b60b7' },
+          { label: '', value: 0, color: '#8e9fe5' }
+        ],
       procenatFakturisanogMesecno: 0,
       cifraMesecno: 0,
       procenatFakturisanogGodisnje: 0,
@@ -147,6 +156,10 @@ export default {
     }
     this.logged = this.$store.state.logged;
 
+    this.sections[0].label = this.mesecIme1;
+    this.sections[1].label = this.mesecIme2;
+    this.sections[2].label = this.mesecIme3;
+
     axios.get("http://837s121.mars-e1.mars-hosting.com/annualIncome", {
       params: {
         sid: localStorage.getItem('sessionid')
@@ -160,6 +173,10 @@ export default {
       this.ovajMesec = response.data.thisMonth;
       this.prosliMesec = response.data.lastMonth;
       this.pretprosliMesec = response.data.twoMonthsAgo;
+
+      this.sections[0].value = this.ovajMesec.total/8000000 * 100;
+      this.sections[1].value = this.prosliMesec.total/8000000 * 100;
+      this.sections[2].value = this.pretprosliMesec.total/8000000 * 100;
     });
   }
 }
