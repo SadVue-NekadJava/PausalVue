@@ -3,7 +3,6 @@
   <nav-bar />
 
   <v-layout row wrap class="justify-center white ma-3">
-    <v-flex class="align-center d-flex">
 
 
    <v-flex  lg5 class="ma-1 pa-1" style="border-right:1px solid black; border-left:1px solid black;">
@@ -90,7 +89,6 @@
             <h1>8 mil</h1>
           </vc-donut>
 
-        </v-flex >
 
 </v-flex>
   </v-layout>
