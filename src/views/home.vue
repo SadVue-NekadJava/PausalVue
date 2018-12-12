@@ -29,8 +29,6 @@
       <p class="mt-1"><em>Promet od 6 miliona dinara</em></p>
     </v-flex>
 
-    <chart :options="polar"></chart>
-
     </v-flex>
 
 
