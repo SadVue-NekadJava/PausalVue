@@ -162,7 +162,7 @@
             <v-icon @click="novaFakturaDugme" class="iks">clear</v-icon>
           </v-layout>
           <v-layout row wrap>
-            <v-flex md3 pa-3>
+            <v-flex md3 pr-3>
               <h1 class="faktura__naslov text-xs-left">Opis fakture</h1>
               <v-select :rules="obaveznoPoljeRules" :items="komitenti" item-text="kom_naziv" item-value="kom_id" v-model="komitentId" label=" Komitent" no-data-text="Trenutno nema stavki." light class="mb-1"></v-select>
 
@@ -196,7 +196,7 @@
               <v-text-field label="Opis" v-model="opisFakture" class="mb2"></v-text-field>
             </v-flex>
 
-            <v-flex md9 class="pa-3">
+            <v-flex md9>
               <h1 class="faktura__naslov text-xs-left">Stavke fakture</h1>
               <v-data-table :headers="tabeleHederi.stavkeFakture" :items="proizvodi" class="elevation-1" no-data-text="Trenutno nema stavki." rows-per-page-text="Redovi po strani:">
                 <tr slot="items" slot-scope="props">
