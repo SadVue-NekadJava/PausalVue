@@ -1,11 +1,13 @@
 <template>
 <div>
   <nav-bar />
+<v-flex xs10 offset-xs1>
 
-  <v-layout row wrap class="justify-center white ma-3">
+
+  <v-layout row wrap class="justify-center white ma-3 ">
 
 
-   <v-flex  lg5 class="ma-1 pa-1" style="border-right:1px solid black; border-left:1px solid black;">
+   <v-flex   lg5 class="ma-1 pa-1" style="border-right:1px solid black; border-left:1px solid black;">
     <v-flex class="pa-4 ma-1">
         <h1 class="tableCell pa-3 ma-1">Ukupan promet:</h1>
 
@@ -92,7 +94,7 @@
 
 </v-flex>
   </v-layout>
-
+</v-flex>
 </div>
 </template>
 
