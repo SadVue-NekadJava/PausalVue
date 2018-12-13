@@ -24,7 +24,8 @@
             :search="search" item-key="redniBroj"
             no-data-text="Trenutno nemate fakture."
             no-results-text="Nema rezultata."
-            rows-per-page-text="Redovi po strani:"
+            rows-per-page-text="Prikazi:"
+            :rows-per-page-items="tabelaPaginacija"
           >
             <template slot="items" slot-scope="faktura">
               <tr data-v-710df83a @click="faktura.expanded = !faktura.expanded" class="tabela__red" :class="{'grey lighten-1': faktura.expanded}">
@@ -44,7 +45,15 @@
               </tr>
             </template>
             <template slot="expand" slot-scope="faktura">
-              <v-data-table :headers="tabeleHederi.listaStavki" :items="faktura.item.stavkeFakture" hide-actions class="elevation-1 forma__sirina-tabele" no-data-text="Trenutno nemate fakture." no-results-text="Nema rezultata." rows-per-page-text="Redovi po strani:">
+              <v-data-table
+                :headers="tabeleHederi.listaStavki"
+                :items="faktura.item.stavkeFakture"
+                hide-actions class="elevation-1 forma__sirina-tabele"
+                no-data-text="Trenutno nemate fakture."
+                no-results-text="Nema rezultata."
+                rows-per-page-text="Prikazi:"
+                :rows-per-page-items="tabelaPaginacija"
+              >
                 <tr slot="items" slot-scope="stavkeFakture" class="grey lighten-2">
                   <td class="text-xs-center">{{ stavkeFakture.item.usp_naziv }}</td>
                   <td class="text-xs-center">{{ tipSelekt[stavkeFakture.item.usp_tip].tipTekst }}</td>
@@ -164,27 +173,43 @@
           <v-layout row wrap>
             <v-flex md3 pr-3>
               <h1 class="faktura__naslov text-xs-left">Opis fakture</h1>
-              <v-select :rules="obaveznoPoljeRules" :items="komitenti" item-text="kom_naziv" item-value="kom_id" v-model="komitentId" label=" Komitent" no-data-text="Trenutno nema stavki." light class="mb-1"></v-select>
+              <v-layout row wrap>
+                <v-flex xs12 sm4 md12 mb-1 pa-1>
+                  <v-select :rules="obaveznoPoljeRules" :items="komitenti" item-text="kom_naziv" item-value="kom_id" v-model="komitentId" label=" Komitent" no-data-text="Trenutno nema stavki." light></v-select>
+                </v-flex>
 
-              <v-dialog ref="datumPrometa" v-model="modal" :return-value.sync="datumPrometa" persistent lazy full-width width="290px" class="mb2">
-                <v-text-field :rules="obaveznoPoljeRules" slot="activator" v-model="datumPrometa" label="Datum prometa" prepend-icon="event" readonly></v-text-field>
-                <v-date-picker v-model="datumPrometa" locale="sr-Latn-CS" :min="danasnjiDatum" scrollable>
-                  <v-spacer></v-spacer>
-                  <v-btn flat color="primary" @click="modal=false">Cancel</v-btn>
-                  <v-btn flat color="primary" @click="$refs.datumPrometa.save(datumPrometa)">OK</v-btn>
-                </v-date-picker>
-              </v-dialog>
+                <v-flex xs12 sm4 md12 mb-1 pa-1>
+                  <v-dialog ref="datumPrometa" v-model="modal" :return-value.sync="datumPrometa" persistent lazy full-width width="290px">
+                    <v-text-field :rules="obaveznoPoljeRules" slot="activator" v-model="datumPrometa" label="Datum prometa" prepend-icon="event" readonly></v-text-field>
+                    <v-date-picker v-model="datumPrometa" locale="sr-Latn-CS" :min="danasnjiDatum" scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn flat color="primary" @click="modal=false">Cancel</v-btn>
+                      <v-btn flat color="primary" @click="$refs.datumPrometa.save(datumPrometa)">OK</v-btn>
+                    </v-date-picker>
+                  </v-dialog>
+                </v-flex>
 
-              <v-dialog ref="datumValute" v-model="modal1" :return-value.sync="datumValute" persistent lazy full-width width="290px" class="mb2">
-                <v-text-field :rules="obaveznoPoljeRules" slot="activator" v-model="datumValute" label="Datum valute" prepend-icon="event" readonly></v-text-field>
-                <v-date-picker v-model="datumValute" locale="sr-Latn-CS" :min="datumPrometa" scrollable>
-                  <v-spacer></v-spacer>
-                  <v-btn flat color="primary" @click="modal1 = false">Cancel</v-btn>
-                  <v-btn flat color="primary" @click="$refs.datumValute.save(datumValute)">OK</v-btn>
-                </v-date-picker>
-              </v-dialog>
+                <v-flex xs12 sm4 md12 mb-1 pa-1>
+                  <v-dialog ref="datumValute" v-model="modal1" :return-value.sync="datumValute" persistent lazy full-width width="290px">
+                    <v-text-field :rules="obaveznoPoljeRules" slot="activator" v-model="datumValute" label="Datum valute" prepend-icon="event" readonly></v-text-field>
+                    <v-date-picker v-model="datumValute" locale="sr-Latn-CS" :min="datumPrometa" scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn flat color="primary" @click="modal1 = false">Cancel</v-btn>
+                      <v-btn flat color="primary" @click="$refs.datumValute.save(datumValute)">OK</v-btn>
+                    </v-date-picker>
+                  </v-dialog>
+                </v-flex>
 
-              <v-select light :rules="obaveznoPoljeRules" :items="mesta" item-text="gra_naziv" item-value="gra_id" v-model="mesto" label="Mesto" class="mb2"></v-select>
+                <v-flex xs12 sm4 md12 mb-1 pa-1>
+                  <v-select light :rules="obaveznoPoljeRules" :items="mesta" item-text="gra_naziv" item-value="gra_id" v-model="mesto" label="Mesto"></v-select>
+                </v-flex>
+                <v-flex xs12 sm4 md12 mb-1 pa-1>
+                  <v-text-field label="Opis" v-model="opisFakture"></v-text-field>
+                </v-flex>
+              </v-layout>
+
+
+
               <!-- <v-textarea
                 name="input-7-1"
                 box
@@ -193,37 +218,17 @@
                 v-model="opisFakture"
                 value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
               ></v-textarea> -->
-              <v-text-field label="Opis" v-model="opisFakture" class="mb2"></v-text-field>
+
             </v-flex>
 
             <v-flex md9>
               <h1 class="faktura__naslov text-xs-left">Stavke fakture</h1>
-              <v-data-table :headers="tabeleHederi.stavkeFakture" :items="proizvodi" class="elevation-1" no-data-text="Trenutno nema stavki." rows-per-page-text="Redovi po strani:">
-                <tr slot="items" slot-scope="props">
-                  <td>{{ props.index+1 }}</td>
-                  <td class="text-xs-center">{{ props.item.naziv }}</td>
-                  <td class="text-xs-center">{{ tipSelekt[props.item.tip].tipTekst }}</td>
-                  <td class="text-xs-center">{{ props.item.cena|thousandSeparator }}</td>
-                  <td class="text-xs-center">{{ props.item.mera }}</td>
-                  <td class="text-xs-center">{{ props.item.kolicina }}</td>
-                  <td class="text-xs-center">{{ props.item.ukupnaCena|thousandSeparator }}</td>
-                  <td class="text-xs-center">
-                    <v-icon small @click="ukloniStavku(props.item)">
-                      delete
-                    </v-icon>
-                  </td>
-                </tr>
-                <template slot="pageText" slot-scope="props">
-                  Prikazujem {{ props.pageStart }} - {{ props.pageStop }} od {{ props.itemsLength }}
-                </template>
-              </v-data-table>
-              <h2 v-if="ukupno!=0" class="theme--light v-table elevation-1 text-xs-right tabela__ukupno pr-5">Ukupno: {{ukupno|thousandSeparator}}</h2>
               <v-layout row wrap class="theme--light v-table elevation-1">
-                <v-flex sm2 class="pa-1">
+                <v-flex xs12 sm4 lg2 class="pa-1">
                   <v-text-field v-model="proizvodNazivUsluge" label="Naziv usluge/proizvoda"></v-text-field>
                 </v-flex>
 
-                <v-flex sm2 class="pa-1">
+                <v-flex xs12 sm4 lg2 class="pa-1">
                   <v-select
                     :items="tipSelekt"
                     v-model="tipTrenutnaVrednost"
@@ -233,25 +238,119 @@
                   ></v-select>
                 </v-flex>
 
-                <v-flex sm2 class="pa-1">
+                <v-flex xs12 sm4 lg2 class="pa-1">
                   <v-text-field v-model="proizvodJedinicnaCena" type="number" label="Jedinicna cena"></v-text-field>
                 </v-flex>
 
-                <v-flex sm2 class="pa-1">
+                <v-flex xs12 sm4 lg2 class="pa-1">
                   <v-text-field v-model="proizvodJedinicaMere" label="Jedinica mere"></v-text-field>
                 </v-flex>
 
-                <v-flex sm2 class="pa-1">
+                <v-flex xs12 sm4 lg2 class="pa-1">
                   <v-text-field v-model="proizvodKolicina" type="number" label="Kolicina"></v-text-field>
                 </v-flex>
 
-                <v-flex sm2 class="pa-1">
-                  <v-btn class="px-1" color="success" @click="dodajProizvod()">Dodaj</v-btn>
+                <v-flex xs12 sm4 lg2 class="pa-1">
+                  <v-btn class="px-1" color="success" @click="dodajProizvod()">Dodaj novu stavku</v-btn>
                 </v-flex>
               </v-layout>
               <div class="nevidljiviInput">
                 <v-text-field :rules="obaveznoPoljeRules" v-model="promenljiva"></v-text-field>
               </div>
+
+              <!-- VELIKI EKRANI -->
+              <v-layout hidden-md-and-down>
+                <v-flex md12>
+                  <v-data-table
+                    :headers="tabeleHederi.stavkeFakture"
+                    :items="proizvodi" class="elevation-1"
+                    no-data-text="Trenutno nema stavki."
+                    rows-per-page-text="Prikazi:"
+                    hidden-lg-and-down
+                    :rows-per-page-items="tabelaPaginacija"
+                  >
+                    <tr slot="items" slot-scope="props">
+                      <td>{{ props.index+1 }}</td>
+                      <td class="text-xs-center">{{ props.item.naziv }}</td>
+                      <td class="text-xs-center">{{ tipSelekt[props.item.tip].tipTekst }}</td>
+                      <td class="text-xs-center">{{ props.item.cena|thousandSeparator }}</td>
+                      <td class="text-xs-center">{{ props.item.mera }}</td>
+                      <td class="text-xs-center">{{ props.item.kolicina }}</td>
+                      <td class="text-xs-center">{{ props.item.ukupnaCena|thousandSeparator }}</td>
+                      <td class="text-xs-center">
+                        <v-icon small @click="ukloniStavku(props.item)">
+                          delete
+                        </v-icon>
+                      </td>
+                    </tr>
+                    <template slot="pageText" slot-scope="props">
+                      Prikazujem {{ props.pageStart }} - {{ props.pageStop }} od {{ props.itemsLength }}
+                    </template>
+                  </v-data-table>
+                </v-flex>
+              </v-layout>
+
+              <!-- MALI I SREDNJI EKRANI -->
+              <v-layout hidden-lg-and-up>
+                <v-flex xs12>
+                  <v-data-iterator
+                    :items="proizvodi"
+                    content-tag="v-layout"
+                    no-data-text="Trenutno nema stavki."
+                    rows-per-page-text="Prikazi:"
+                    :rows-per-page-items="iteratorTabelaPaginacija"
+                    row
+                    wrap
+                    light
+                    class="theme--light v-table pt-2"
+                  >
+                    <v-flex
+                      slot="item"
+                      slot-scope="proizvod"
+                      xs12
+                      sm6
+                      md4
+                      pa-1
+                    >
+                      <v-card>
+                        <v-card-title><h4>{{ proizvod.item.naziv }}</h4></v-card-title>
+                        <v-divider></v-divider>
+                        <v-list dense>
+                          <v-list-tile>
+                            <v-list-tile-content>Proizvod/usluga:</v-list-tile-content>
+                            <v-list-tile-content class="align-end">{{ tipSelekt[proizvod.item.tip].tipTekst }}</v-list-tile-content>
+                          </v-list-tile>
+                          <v-list-tile>
+                            <v-list-tile-content>Jedinicna cena (RSD):</v-list-tile-content>
+                            <v-list-tile-content class="align-end">{{ proizvod.item.cena|thousandSeparator }}</v-list-tile-content>
+                          </v-list-tile>
+                          <v-list-tile>
+                            <v-list-tile-content>Jedinica mere:</v-list-tile-content>
+                            <v-list-tile-content class="align-end">{{ proizvod.item.mera }}</v-list-tile-content>
+                          </v-list-tile>
+                          <v-list-tile>
+                            <v-list-tile-content>Kolicina:</v-list-tile-content>
+                            <v-list-tile-content class="align-end">{{ proizvod.item.kolicina }}</v-list-tile-content>
+                          </v-list-tile>
+                          <v-list-tile>
+                            <v-list-tile-content>Ukupna cena:</v-list-tile-content>
+                            <v-list-tile-content class="align-end">{{ proizvod.item.ukupnaCena|thousandSeparator }}</v-list-tile-content>
+                          </v-list-tile>
+                          <v-list-tile>
+                            <v-list-tile-content>Ukloni stavku:</v-list-tile-content>
+                            <v-list-tile-content class="align-end">
+                              <v-icon small @click="ukloniStavku(proizvod.item)">
+                                delete
+                              </v-icon>
+                            </v-list-tile-content>
+                          </v-list-tile>
+                        </v-list>
+                      </v-card>
+                    </v-flex>
+                  </v-data-iterator>
+                </v-flex>
+              </v-layout>
+              <h2 v-if="ukupno!=0" class="theme--light v-table elevation-1 text-xs-right tabela__ukupno pr-5 py-2">Ukupan iznos fakture: {{ukupno|thousandSeparator}}</h2>
             </v-flex>
           </v-layout>
           <v-layout row wrap class="justify-center">
@@ -296,6 +395,14 @@ export default {
       proizvodKolicina: '',
       proizvodJedinicnaCena: '',
       // TABELE
+      tabelaPaginacija: [5, 10, 25, {
+        "text": "Sve",
+        "value": -1
+      }],
+      iteratorTabelaPaginacija: [6, 12, 24, {
+        "text": "Sve",
+        "value": -1
+      }],
       tabeleHederi: {
         // GLAVNA TABELA NA STRANI FAKTURE
         listaFaktura: [
