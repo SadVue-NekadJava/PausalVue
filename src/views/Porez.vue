@@ -1,11 +1,15 @@
 <template >
-<div>
+<div class="wrapper">
 <nav-bar/>
 
 <div class=" mainPorez">
 
 
-  <v-layout class="mt-5 tabColor elevation-24  pa-5" row wrap>
+  <v-layout  row wrap>
+
+    <v-flex offset-xs1 class="mt-5 tabColor elevation-24  pa-5" xs10>
+<v-layout row wrap>
+
 
 
     <v-flex  class="mt-2  "  md3>
@@ -40,6 +44,8 @@
     </v-flex>
 
     <v-flex class="forma pa-3" md9>
+      <h2 class="text-xs-center pb-2">{{svrhaIsplateIzabrana.poruka}}</h2>
+
       <div class="uplatnica">
         <v-layout row wrap>
 
@@ -75,6 +81,7 @@
           </v-flex>
 
           <v-flex xs12 lg6 class="pa-2">
+
             <v-layout row wrap class="mt-1">
               <v-flex class="malaPolja pr-2" xs2>
                 <p class="textLabel">Sifra placanja</p>
@@ -147,9 +154,10 @@
         </v-layout>
       </div>
     </v-flex>
-
+    </v-layout>
+</v-flex>
   </v-layout>
-  <div class="text-xs-center ">
+  <div class="text-xs-center mb-5">
 
 
     <v-btn @click="stampaj(4)" large  class="mt-4" color="success">Stampaj sve</v-btn>
@@ -282,17 +290,14 @@ sacuvajIzmeneNaloga(){
 }
 </script>
 
-<style scoped>
+<style  >
+
 .mainPorez{
-position:absolute;
-width: 60%;
-top:50%;
-left:50%;
-transform: translate(-50%, -50%);
+min-height: 100vh;
 }
 
 .active{
-  background-color:black;
+  background-color:#82959e;
   transform: scale(1.05);
   color:white;
 }

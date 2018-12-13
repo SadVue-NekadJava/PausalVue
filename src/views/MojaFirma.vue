@@ -4,7 +4,7 @@
 
 
   <v-layout  row wrap>
-    <v-flex   class="forma   pr-5 pl-5 pb-4 pt-4"  md8 offset-md2 xl6 offset-xl3>
+    <v-flex   class="tabColor mb-5 elevation-24   pa-5 mt-4"  md8 offset-md2 xl6 offset-xl3>
       <div class="relativni">
 
 
@@ -26,8 +26,8 @@
 
 </div>
 </div >
-<hr>
-<v-form class="relativni unutrasnjaForma" refs="form" v-model="valid">
+<hr class="pb-1">
+<v-form class="relativni " refs="form" v-model="valid">
 
 
 
@@ -131,7 +131,7 @@ v-model="punNaziv"
   </v-flex>
     </v-layout>
 <h3 class="pt-5 pb-1 blue-grey--text"><em>Kontakt podaci</em></h3>
-<hr>
+<hr class="pb-1">
 <v-layout class="pt-3" row wrap>
   <v-flex xs3>
     <h3 >Adresa:</h3>

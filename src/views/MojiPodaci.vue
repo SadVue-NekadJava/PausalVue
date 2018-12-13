@@ -4,7 +4,7 @@
 
 
   <v-layout row wrap>
-    <v-flex class="forma   pr-5 pl-5 pb-4 pt-4" md8 offset-md2 xl6 offset-xl3>
+    <v-flex class="tabColor elevation-24 mt-4  pa-5" md4 offset-md4 xl4 offset-xl4>
 
       <div>
         <h1 class="text-xs-center">Licni podaci</h1>
@@ -22,7 +22,7 @@
 
         </div>
       </div>
-      <hr>
+      <hr class="pb-1">
 
 
 
@@ -31,106 +31,126 @@
         <v-flex>
           <v-form refs="form" v-model="valid">
             <v-layout class="pt-4" row wrap>
-              <v-flex xs7>
+              <v-flex xs4>
                 <h3>Ime i prezime</h3>
               </v-flex>
-              <v-flex class="pa-4" hidden-sm-and-up xs5>
+              <v-flex class="pa-4" hidden-sm-and-up xs9>
               </v-flex>
-              <v-flex xs5 v-if="izmenaPodataka">
+              <v-flex xs7 v-if="izmenaPodataka">
                 <h3 class="podaci">{{ime}} {{prezime}}</h3>
               </v-flex>
-              <v-flex xs5 v-else>
-                <v-text-field class="podaciIzmena pa-0" v-model="ime" :rules="obaveznoPoljeRules"></v-text-field>
+              <v-flex xs7 v-else>
+                <v-layout row wrap>
+
+
+                <v-flex xs2>
+                <v-text-field class="podaciIzmena pr-2 pa-0" v-model="ime" :rules="obaveznoPoljeRules"></v-text-field>
+</v-flex>
+
+<v-flex xs2>
                 <v-text-field class="podaciIzmena pa-0" v-model="prezime" :rules="obaveznoPoljeRules"></v-text-field>
+              </v-flex>
+</v-layout>
               </v-flex>
             </v-layout>
             <v-layout class="pt-4" row wrap>
-              <v-flex xs7>
+              <v-flex xs4>
                 <h3>Ime roditelja</h3>
               </v-flex>
-              <v-flex class="pa-4" hidden-sm-and-up xs5>
+              <v-flex class="pa-4" hidden-sm-and-up xs9>
               </v-flex>
-              <v-flex xs5>
+              <v-flex xs2>
                 <h3 v-if="izmenaPodataka" class="podaci">{{imeRoditelja}}</h3>
                 <v-text-field v-else class="podaciIzmena pa-0" v-model="imeRoditelja" :rules="obaveznoPoljeRules"></v-text-field>
               </v-flex>
             </v-layout>
             <v-layout class="pt-4" row wrap>
-              <v-flex xs7>
+              <v-flex xs4>
                 <h3>Jmbg</h3>
               </v-flex>
-              <v-flex class="pa-4" hidden-sm-and-up xs5>
+              <v-flex class="pa-4" hidden-sm-and-up xs9>
               </v-flex>
-              <v-flex xs5>
+              <v-flex xs2>
                 <h3 v-if="izmenaPodataka" class="podaci">{{jmbg}}</h3>
                 <v-text-field v-else class="podaciIzmena pa-0" v-model="jmbg" mask="#############" :rules="obaveznoPoljeRules"></v-text-field>
               </v-flex>
             </v-layout>
             <v-layout class="pt-4" row wrap>
-              <v-flex xs7>
+              <v-flex xs4>
                 <h3>Strucna sprema: </h3>
               </v-flex>
-              <v-flex class="pa-4" hidden-sm-and-up xs5>
+              <v-flex class="pa-4" hidden-sm-and-up xs9>
               </v-flex>
-              <v-flex xs5>
+              <v-flex xs1>
                 <h3 v-if="izmenaPodataka" class="podaci">{{strucnaSprema}}</h3>
                 <v-text-field v-else class="podaciIzmena pa-0" v-model="strucnaSprema" :rules="obaveznoPoljeRules"></v-text-field>
               </v-flex>
             </v-layout>
             <v-layout class="pt-4" row wrap>
-              <v-flex xs7>
+              <v-flex xs4>
                 <h3>U radnom odnosu: </h3>
               </v-flex>
-              <v-flex class="pa-4" hidden-sm-and-up xs5>
+              <v-flex class="pa-4" hidden-sm-and-up xs9>
               </v-flex>
-              <v-flex xs5>
+              <v-flex xs1>
                 <h3 v-if="izmenaPodataka" class="podaci">{{uRadnomOdnosuNiz[uRadnomOdnosu].uRadnomOdnosuTekst}}</h3>
                 <v-select v-if="!izmenaPodataka" :items="uRadnomOdnosuNiz" v-model="uRadnomOdnosu" item-text="uRadnomOdnosuTekst" item-value="uRadnomOdnosuVrednost" :rules="polIRadniOdnosRules"></v-select>
               </v-flex>
             </v-layout>
             <v-layout class="pt-4" row wrap>
-              <v-flex xs7>
+              <v-flex xs4>
                 <h3>Pol: </h3>
               </v-flex>
-              <v-flex class="pa-4" hidden-sm-and-up xs5>
+              <v-flex class="pa-4" hidden-sm-and-up xs9>
               </v-flex>
-              <v-flex xs5>
+              <v-flex xs1>
                 <h3 v-if="izmenaPodataka" class="podaci">{{polNiz[pol].polNizTekst}}</h3>
                 <v-select v-if="!izmenaPodataka" :items="polNiz" v-model="pol" item-text="polNizTekst" item-value="polNizVrednost" :rules="polIRadniOdnosRules"></v-select>
               </v-flex>
             </v-layout>
-            <h3 class="pt-5 pb-1 blue-grey--text"><em>Kontakt podaci</em></h3>
-            <hr>
+            <h3 class="pt-5   pb-1 blue-grey--text"><em>Kontakt podaci</em></h3>
+            <hr class="pb-1">
             <v-layout class="pt-3" row wrap>
-              <v-flex xs7>
+              <v-flex xs4>
                 <h3>Adresa:</h3>
 
               </v-flex>
-              <v-flex class="pa-4" hidden-sm-and-up xs5>
+              <v-flex class="pa-4" hidden-sm-and-up xs9>
               </v-flex>
-              <v-flex xs5>
+              <v-flex xs4>
                 <h3 v-if="izmenaPodataka" class="podaci">{{adresa}}</h3>
                 <v-text-field v-else class="podaciIzmena pa-0" :rules="obaveznoPoljeRules" v-model="adresa"></v-text-field>
               </v-flex>
             </v-layout>
             <v-layout class="pt-3" row wrap>
-              <v-flex xs7>
+              <v-flex xs4>
                 <h3>Mesto:</h3>
 
               </v-flex>
-              <v-flex class="pa-4" hidden-sm-and-up xs5>
+              <v-flex class="pa-4" hidden-sm-and-up xs9>
               </v-flex>
-              <v-flex xs5>
+              <v-flex xs7>
                 <h3 v-if="izmenaPodataka" class="podaci">{{opstina}}, {{grad}}</h3>
-                <v-select v-if="!izmenaPodataka" :items="opstine" v-model="opstinaId" item-text="ops_naziv" item-value="ops_id" :rules="obaveznoPoljeRules"></v-select>
-                <v-select v-if="!izmenaPodataka" :items="gradovi" v-model="gradId" item-text="gra_naziv" item-value="gra_id" :rules="obaveznoPoljeRules" @change="spisakOpstina($event)"></v-select>
+                <v-layout row wrap>
+                  <v-flex xs3>
+                    <v-select v-if="!izmenaPodataka" :items="opstine" v-model="opstinaId" item-text="ops_naziv" item-value="ops_id" :rules="obaveznoPoljeRules"></v-select>
+
+                  </v-flex>
+                <v-flex xs1>
+
+                </v-flex>
+                <v-flex xs3>
+                  <v-select v-if="!izmenaPodataka" :items="gradovi" v-model="gradId" item-text="gra_naziv" item-value="gra_id" :rules="obaveznoPoljeRules" @change="spisakOpstina($event)"></v-select>
+
+                </v-flex>
+                </v-layout>
               </v-flex>
             </v-layout>
           </v-form>
           <div v-if="!izmenaPodataka">
             <label @click="izmenaSifre=!izmenaSifre" class="labelSlike" for="izborSlike">Kliknite ovde da izmenite lozinku</label>
             <v-flex v-if="izmenaSifre  ">
-              <hr>
+              <hr class="pb-1">
 
               <v-form refs="form" v-model="validPassword">
 
@@ -388,6 +408,10 @@ export default {
 </script>
 
 <style scoped >
+h3{
+  color: #68645a;
+  font-weight: 400;
+}
 .labelSlike {
   color: blue;
   cursor: pointer;
@@ -438,9 +462,9 @@ export default {
   position: relative;
 }
 
-.podaci {
-  color: #68645a;
-  font-weight: 400;
+.podaci{
+  color:black;
+  font-weight:600;
 }
 
 input {
