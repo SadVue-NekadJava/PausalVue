@@ -290,7 +290,7 @@ sacuvajIzmeneNaloga(){
 }
 </script>
 
-<style  >
+<style scoped>
 
 .mainPorez{
 min-height: 100vh;
