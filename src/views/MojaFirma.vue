@@ -3,8 +3,8 @@
 <nav-bar/>
 
 
-  <v-layout  row wrap>
-    <v-flex   class="tabColor mb-5 elevation-24   pa-5 mt-4"  md8 offset-md2 xl6 offset-xl3>
+  <v-layout  row wrap pa-5>
+    <v-flex   class="tabColor mb-5 elevation-24 pa-4  "  md8 offset-md2 xl6 offset-xl3>
       <div class="relativni">
 
 

@@ -16,6 +16,8 @@
             </v-flex>
             <v-flex sm3>
               <v-btn class="success mb-3 mt-0" @click="novaFakturaDugme" v-if="novafaktura">Kreiraj novu Fakturu</v-btn>
+              <v-btn @click="stampaj" color="primary">Stampaj KPO</v-btn>
+
             </v-flex>
           </v-layout>
           <v-data-table
@@ -576,6 +578,19 @@ export default {
 
   },
   methods: {
+    stampaj(){
+
+      axios.get("http://837s121.mars-e1.mars-hosting.com/getUrl", {
+        params: {
+          sid: localStorage.getItem('sessionid'),
+          tipUplatnice:5
+        }
+      }).then(response => {
+        console.log(response.data);
+        window.open(response.data.url);
+      });
+
+    },
     izbrisiRadnuVerzijuFakture(fakId){
       axios.delete("http://837s121.mars-e1.mars-hosting.com/deleteTemplate", {
       params:{  sid: localStorage.getItem('sessionid'),

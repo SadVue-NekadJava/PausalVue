@@ -1,12 +1,15 @@
 <template>
-<div>
+<div >
   <nav-bar/>
+  <div class="pa-5">
+
+
   <v-flex xs6 offset-xs2>
 
 
-    <div v-if="idKomitentaZaBrisanje!=0" class="text-xs-center  modal pa-5">
-      <h1>Da li ste sigurni da zelite da obrisete komitenta "{{komitentZaBrisanje}}"?</h1>
-      <v-btn @click="brisanjeKomitentaPotvrdjeno" color="success">Da</v-btn>
+    <div v-if="idKomitentaZaBrisanje!=0"  class="text-xs-center  modal pa-5">
+      <p class="modal-paragraph">Da li ste sigurni da zelite da obrisete komitenta "{{komitentZaBrisanje}}"?</p>
+      <v-btn @click="brisanjeKomitentaPotvrdjeno" color="error">Da</v-btn>
       <v-btn @click="idKomitentaZaBrisanje=0" color="secondary">Ne</v-btn>
     </div>
     <div v-if="statusIzbrisanog" class="text-xs-center  modal pa-5">
@@ -16,6 +19,7 @@
       <v-btn @click="uspesnoBrisanje" color="primary">Ok</v-btn>
     </div>
   </v-flex>
+
   <transition name="animacijaForme">
     <v-flex xs12 sm6 offset-sm3 class="forma text-xs-center" v-if="kreirajNovog">
       <v-layout row wrap>
@@ -49,7 +53,7 @@
       </v-form>
     </v-flex>
   </transition>
-  <transition name="animacijaListe">
+  <!-- <transition name="animacijaListe">
     <v-flex xs12 md6 offset-md3 v-if="!kreirajNovog" class="forma">
       <v-layout align-center justify-center row wrap>
 
@@ -84,7 +88,63 @@
       </v-expansion-panel>
 
     </v-flex>
-  </transition>
+  </transition> -->
+
+
+
+  <div v-if="!kreirajNovog" row wrap class="forma pa-4" >
+        <v-layout row wrap class="mb-1">
+          <v-flex sm3>
+            <v-text-field
+              v-model="search"
+              append-icon="search"
+              label="Pretraga komitenata"
+              single-line
+              autofocus
+            ></v-text-field>
+          </v-flex>
+          <v-layout align-center justify-center row wrap>
+
+            <v-btn @click="kreiranjeNovog"
+             v-if="!kreirajNovog"
+             color="success"
+              class="mb-4 mt-4">Dodaj novog komitenta</v-btn>
+          </v-layout>
+        </v-layout>
+
+        <v-data-table
+          :headers="headeriKomitenti"
+          :items="komitenti" class="elevation-1 tabela"
+          :search="search" item-key="redniBroj"
+          no-data-text="Trenutno nemate fakture."
+          no-results-text="Nema rezultata."
+          rows-per-page-text="Prikazi:"
+          :rows-per-page-items="tabelaPaginacija"
+        >
+          <template slot="items" slot-scope="komitent" >
+            <tr  @click="komitent.expanded = !komitent.expanded"
+             class="tabela__red">
+              <td class="text-xs-center tabela-td">{{ komitent.item.redniBroj }}</td>
+              <td class="text-xs-center tabela-td">{{ komitent.item.kom_punNaziv }}</td>
+              <td class="text-xs-center tabela-td">{{ komitent.item.ukupno }}</td>
+              <td class="text-xs-center tabela-td">{{ komitent.item.kom_adresa }}</td>
+              <td class="text-xs-center tabela-td">{{ komitent.item.kom_adresa }}</td>
+
+
+              <td class="text-xs-center">
+                <v-icon small @click="brisanjeKomitenta(komitent.item.kom_id,komitent.item.kom_naziv)" >
+                  delete
+                </v-icon>
+              </td>
+            </tr>
+          </template>
+
+          <template slot="pageText" slot-scope="props">
+            Prikazujem {{ props.pageStart }} - {{ props.pageStop }} od {{ props.itemsLength }}
+          </template>
+        </v-data-table>
+      </div>
+        </div>
 </div>
 </template>
 
@@ -113,6 +173,7 @@ export default {
       komEmail: '',
       komTelefon: '',
       gradovi: [],
+      search:'',
       komOpstine: ['Prvo izaberite grad  '],
       obaveznoPoljeRules: [
         v => !!v || 'Obavezno polje.'
@@ -120,7 +181,48 @@ export default {
       pibRules: [
         v => !!v || 'Morate uneti Pib',
         v => (v && v.length == 9) || 'Pib mora sadrzati 9 cifara'
-      ]
+      ],
+
+        // GLAVNA TABELA NA STRANI FAKTURE
+        headeriKomitenti: [
+          {
+            // PRVA CELIJA U TABELI, REDNI BROJEVI
+            value: 'redniBroj',
+            align: 'center'
+          },
+          {
+            text: 'Komitent',
+            value: "kom_punNaziv",
+            align: 'center'
+          },
+          {
+            text: 'Ukupno fakturisano',
+            value: "fak_brojFakture",
+            align: 'center'
+          },
+          {
+            text: 'Ukupna fakturisano (tekuca godina)',
+            value: 'fak_total',
+            align: 'center'
+          },
+          {
+            text: 'Datum izdavanja poslednje fakture',
+            value: 'fak_datumIzdavanja',
+            align: 'center'
+          },
+          {
+            text: 'Obrisi komitenta',
+            sortable: false,
+            align: 'center'
+          }
+
+        ],
+        tabelaPaginacija: [5, 10, 25, {
+          "text": "Sve",
+          "value": -1
+        }]
+
+
 
     }
   },
@@ -144,6 +246,12 @@ export default {
       }).then(response => {
         this.komitenti = response.data.komitenti;
 
+        for(var i=0; i<response.data.komitenti.length; i++){
+          let komitent=response.data.komitenti[i];
+
+          // REDNI BROJ FAKTURE NA TABELI
+          komitent.redniBroj=i+1;
+}
 
 
       });
@@ -193,6 +301,7 @@ export default {
           sid: localStorage.getItem('sessionid')
         }
       }).then(response => {
+
         this.komitenti = response.data.komitenti;
 
 
@@ -285,12 +394,16 @@ export default {
   width: 50%;
   z-index: 100;
   opacity: 1;
-  top: 30%;
+  top: 45%;
+  left: 50%;
+    transform: translate(-50%, -50%);
   border-radius: 10px;
   background-color: white;
-  -webkit-box-shadow: 0px 2px 241px -3px rgba(0, 0, 0, 1);
-  -moz-box-shadow: 0px 2px 241px -3px rgba(0, 0, 0, 1);
-  box-shadow: 0px 2px 241px -3px rgba(0, 0, 0, 1);
+  -webkit-box-shadow: 0px 10px 30px  rgba(0, 0, 0, 1);
+  -moz-box-shadow:  0px 10px 10px rgba(0, 0, 0, 1);
+  box-shadow: 0 5px 10px #aaaaaa;
+  border: 2px solid lightgrey;
+
   position: fixed;
 }
 
@@ -326,5 +439,11 @@ export default {
 
 .animacijaListe-leave-to {
   opacity: 0;
+}
+.modal-paragraph{
+  font-size: 16px;
+}
+.tabela-td{
+font-size: 30px;
 }
 </style>

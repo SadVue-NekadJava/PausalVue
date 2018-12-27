@@ -3,8 +3,8 @@
 <nav-bar/>
 
 
-  <v-layout row wrap>
-    <v-flex class="tabColor elevation-24 mt-4  pa-5" md4 offset-md4 xl4 offset-xl4>
+  <v-layout row wrap pa-5>
+    <v-flex class="tabColor elevation-24   pa-5" md4 offset-md4 xl4 offset-xl4>
 
       <div>
         <h1 class="text-xs-center">Licni podaci</h1>
