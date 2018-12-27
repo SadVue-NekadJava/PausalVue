@@ -14,8 +14,8 @@
                 autofocus
               ></v-text-field>
             </v-flex>
-            <v-flex sm3>
-              <v-btn class="success mb-3 mt-0" @click="novaFakturaDugme" v-if="novafaktura">Kreiraj novu Fakturu</v-btn>
+            <v-flex sm6>
+              <v-btn class="success" @click="novaFakturaDugme" v-if="novafaktura">Kreiraj novu Fakturu</v-btn>
               <v-btn @click="stampaj" color="primary">Stampaj KPO</v-btn>
 
             </v-flex>
@@ -783,17 +783,19 @@ export default {
 
     },
     storiniranjeFakture(n) {
-      if (n) {
-        axios.post("http://837s121.mars-e1.mars-hosting.com/cancelInvoice", {
-            sid: localStorage.getItem('sessionid'),
-            fakId: n
-          })
-          .then(response => {
+      if(confirm('Da li ste sigurni?')){
+        if (n) {
+          axios.post("http://837s121.mars-e1.mars-hosting.com/cancelInvoice", {
+              sid: localStorage.getItem('sessionid'),
+              fakId: n
+            })
+            .then(response => {
 
-            this.preuzmiFakture();
-          });
+              this.preuzmiFakture();
+            });
+        }
+        this.modal2 = false;
       }
-      this.modal2 = false;
     }
   },
   mounted() {
