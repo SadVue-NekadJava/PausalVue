@@ -2,7 +2,7 @@
 <div>
   <nav-bar />
 <v-flex xs10 offset-xs1>
-
+<v-btn @click="stampaj" color="primary">Stampaj KPO</v-btn>
 
   <v-layout row wrap class="justify-center white ma-3 ">
 
@@ -141,7 +141,19 @@ export default {
     }
   },
   methods: {
+    stampaj(){
 
+      axios.get("http://837s121.mars-e1.mars-hosting.com/getUrl", {
+        params: {
+          sid: localStorage.getItem('sessionid'),
+          tipUplatnice:5
+        }
+      }).then(response => {
+        console.log(response.data);
+        window.open(response.data.url);
+      });
+
+    },
   },
   mounted() {
 
