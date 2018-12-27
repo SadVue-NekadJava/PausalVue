@@ -11,7 +11,7 @@ Vue.use(Vuetify, {
     info: '#2196F3',
     success: '#27ae60',
     warning: '#FFC107',
-    tabColor:'#d0dee5'
+    tabColor:'#fff'
 
   },
   iconfont: 'md',

@@ -138,7 +138,7 @@
                 </div>
               </v-flex>
             </v-layout>
-            <div class="d-flex mt-5">
+            <div class="d-flex mt-5 " >
               <v-flex xs12 lg9 class="text-xs-center">
                 <hr>
                 <p>datum izvrsenja</p>

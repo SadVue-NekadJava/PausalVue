@@ -22,7 +22,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .wrapper{
   background-image: url('./assets/officeBg2.jpg');
 background-size: cover;
@@ -34,8 +34,8 @@ min-height: 100vh;
 
 
 }
-.forma {
-background-color: rgba(255, 255, 255, 0.9);
+/* .forma {
+background-color: rgba(255, 255, 255, 1);
 border-radius: 10px;
 border: 1px solid light-green;
 }
@@ -46,5 +46,5 @@ border: 1px solid light-green;
   background-color: #98b2e6;
   min-height:97vh;
 ;
-}
+} */
 </style>

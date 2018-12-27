@@ -57,7 +57,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-toolbar  class="opacity elevation-15" >
+    <v-toolbar  class=" elevation-15" >
       <v-toolbar-side-icon
        class="hidden-md-and-up" @click="drawer = !drawer">
      </v-toolbar-side-icon>
@@ -147,7 +147,7 @@ export default {
 }
 </script>
 
-<style >
+<style  >
 html{
 font-family: 'Patua One', cursive;
 }
@@ -166,8 +166,8 @@ min-height: 100vh;
 
 } */
 .forma {
-background-color: rgba(255, 255, 255, 0.9);
-border-radius: 10px;
+background-color: rgba(255, 255, 255, 1);
+/* border-radius: 10px; */
 border: 1px solid light-green;
 }
 

@@ -394,7 +394,7 @@ export default {
 }
 </script>
 
-<style >
+<style scoped>
 .zaboravljenaSifra {
   cursor: pointer;
 }
