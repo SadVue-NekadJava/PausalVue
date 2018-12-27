@@ -2,7 +2,7 @@
 <div>
   <nav-bar/>
 
-  <v-form ref="form" v-model="valid">
+  <v-form ref="form" v-model="valid" class="pa-5">
     <div v-if="novafaktura" row wrap class="forma pa-4" >
           <v-layout row wrap class="mb-1">
             <v-flex sm3>
@@ -28,7 +28,7 @@
             :rows-per-page-items="tabelaPaginacija"
           >
             <template slot="items" slot-scope="faktura">
-              <tr data-v-710df83a @click="faktura.expanded = !faktura.expanded" class="tabela__red" :class="{'grey lighten-1': faktura.expanded}">
+              <tr data-v-710df83a @click="faktura.expanded = !faktura.expanded" class="tabela__red" :class="{'grey lighten-1': faktura.expanded && faktura.item.fak_status==1,'blue lighten-1 white--text': faktura.item.fak_status==2, 'red lighten-1 white--text':  faktura.item.fak_status==3}">
                 <td>{{ faktura.item.redniBroj }}</td>
                 <td class="text-xs-center text-truncate">{{ faktura.item.kom_naziv}}</td>
                 <td class="text-xs-center">{{ faktura.item.fak_brojFakture}}</td>
@@ -37,7 +37,7 @@
                 <td class="text-xs-center">{{ faktura.item.fak_datumPrometaIspis}}</td>
                 <td class="text-xs-center">{{ faktura.item.fak_valutaIspis}}</td>
                 <td class="text-xs-center">
-                  <v-icon small @click="ukloniStavku(faktura.item)">
+                  <v-icon small @click="storiniranjeFakture(faktura.item.fak_id)" :class="{'white--text':faktura.item.fak_status==2||faktura.item.fak_status==3}">
                     delete
                   </v-icon>
                 </td>
@@ -54,7 +54,7 @@
                 rows-per-page-text="Prikazi:"
                 :rows-per-page-items="tabelaPaginacija"
               >
-                <tr slot="items" slot-scope="stavkeFakture" class="grey lighten-2">
+                <tr slot="items" slot-scope="stavkeFakture" class="grey lighten-2" :class="{}">
                   <td class="text-xs-center">{{ stavkeFakture.item.usp_naziv }}</td>
                   <td class="text-xs-center">{{ tipSelekt[stavkeFakture.item.usp_tip].tipTekst }}</td>
                   <td class="text-xs-center">{{ stavkeFakture.item.usp_cena|thousandSeparator }}</td>
@@ -68,6 +68,19 @@
               Prikazujem {{ props.pageStart }} - {{ props.pageStop }} od {{ props.itemsLength }}
             </template>
           </v-data-table>
+          <v-layout row wrap justify-end>
+            <v-flex xs12 md2 pa-1>
+              <div class="d-inline-block legendIcon--dimensions blue lighten-1 vertical_align"></div>
+              <div class="d-inline-block vertical_align">
+                 - Nacrt faktura
+              </div>
+            </v-flex>
+            <v-flex xs12 md2 pa-1>
+              <div>
+                <div class="d-inline-block legendIcon--dimensions red lighten-1"></div> - Stornirana faktura
+              </div>
+            </v-flex>
+          </v-layout>
           <!--<v-expansion-panel-content class="listaFaktura" v-for="(faktura,index) in fakture" :key="faktura.id">
             <div slot="header">
               <v-layout row wrap>
@@ -623,6 +636,7 @@ export default {
           // DA LI POSTOJI BROJ FAKTURE?
           if (faktura.fak_brojFakture === null) {
             faktura.fak_brojFakture = 'Samo izdate fakture mogu imati broj.'
+            faktura.fak_datumIzdavanja = 'Samo izdate fakture mogu imati datum izdavanja.'
           }
 
           // OMOGUCAVA SORTIRANJE STAVKI FAKTURA PO UKUPNOJ CENI
@@ -757,7 +771,7 @@ export default {
       if (n) {
         axios.post("http://837s121.mars-e1.mars-hosting.com/cancelInvoice", {
             sid: localStorage.getItem('sessionid'),
-            fakId: this.odabranaFaktura.fak_id
+            fakId: n
           })
           .then(response => {
 
@@ -912,5 +926,14 @@ th {
   -moz-box-shadow: 0px 2px 241px -3px rgba(0, 0, 0, 1);
   box-shadow: 0px 2px 241px -3px rgba(0, 0, 0, 1);
   position: fixed;
+}
+
+.legendIcon--dimensions{
+  height: 14px;
+  width: 14px;
+}
+
+.vertical_align{
+  vertical-align: center;
 }
 </style>
