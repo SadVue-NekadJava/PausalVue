@@ -14,10 +14,19 @@
                 autofocus
               ></v-text-field>
             </v-flex>
-            <v-flex sm6>
+            <v-flex sm7>
               <v-btn class="success" @click="novaFakturaDugme" v-if="novafaktura">Kreiraj novu Fakturu</v-btn>
               <v-btn @click="stampaj" color="primary">Stampaj KPO</v-btn>
-
+            </v-flex>
+            <v-flex sm2>
+              <v-flex xs12 class="d--flex mt-1">
+                <div class="blue lighten-1 legendIcon--dimensions legendIcon--border"></div>
+                <p class="ma-0 legendIcon--text ml-1">- Nacrt fakture</p>
+              </v-flex>
+              <v-flex xs12 class="d--flex mt-1">
+                <div class="red lighten-1 legendIcon--dimensions legendIcon--border"></div>
+                <p class="ma-0 legendIcon--text ml-1">- Stornirana faktura</p>
+              </v-flex>
             </v-flex>
           </v-layout>
           <v-data-table
@@ -30,7 +39,14 @@
             :rows-per-page-items="tabelaPaginacija"
           >
             <template slot="items" slot-scope="faktura">
-              <tr data-v-710df83a @click="faktura.expanded = !faktura.expanded" class="tabela__red" :class="{'grey lighten-1': faktura.expanded && faktura.item.fak_status==1,'blue lighten-1 white--text': faktura.item.fak_status==2, 'red lighten-1 white--text':  faktura.item.fak_status==3}">
+              <tr data-v-710df83a class="tabela__red"
+                :class="{
+                  'blue lighten-1 white--text': faktura.item.fak_status==2,
+                  'red lighten-1 white--text':  faktura.item.fak_status==3,
+                  'red darken-1 white--text':  faktura.item.isteklaValuta
+                }"
+                @click="stampajFakturu(faktura.item.fak_id)"
+              >
                 <td>{{ faktura.item.redniBroj }}</td>
                 <td class="text-xs-center text-truncate">{{ faktura.item.kom_naziv}}</td>
                 <td class="text-xs-center">{{ faktura.item.fak_brojFakture}}</td>
@@ -56,10 +72,11 @@
                 rows-per-page-text="Prikazi:"
                 :rows-per-page-items="tabelaPaginacija"
               >
-                <tr slot="items" slot-scope="stavkeFakture" class="grey lighten-2" :class="{}">
+                <tr slot="items" slot-scope="stavkeFakture">
                   <td class="text-xs-center">{{ stavkeFakture.item.usp_naziv }}</td>
                   <td class="text-xs-center">{{ tipSelekt[stavkeFakture.item.usp_tip].tipTekst }}</td>
                   <td class="text-xs-center">{{ stavkeFakture.item.usp_cena|thousandSeparator }}</td>
+                  <td class="text-xs-center">{{ stavkeFakture.item.usp_mera }}</td>
                   <td class="text-xs-center">{{ stavkeFakture.item.usp_mera }}</td>
                   <td class="text-xs-center">{{ stavkeFakture.item.usp_kolicina }}</td>
                   <td class="text-xs-center">{{ stavkeFakture.item.ukupno | thousandSeparator }}</td>
@@ -71,16 +88,13 @@
             </template>
           </v-data-table>
           <v-layout row wrap justify-end>
-            <v-flex xs12 md2 pa-1>
-              <div class="d-inline-block legendIcon--dimensions blue lighten-1 vertical_align"></div>
-              <div class="d-inline-block vertical_align">
-                 - Nacrt faktura
-              </div>
+            <v-flex xs12 md2 class="d--flex mt-1 justify-center">
+              <div class="blue lighten-1 legendIcon--dimensions legendIcon--border"></div>
+              <p class="ma-0 legendIcon--text ml-1">- Nacrt fakture</p>
             </v-flex>
-            <v-flex xs12 md2 pa-1>
-              <div>
-                <div class="d-inline-block legendIcon--dimensions red lighten-1"></div> - Stornirana faktura
-              </div>
+            <v-flex xs12 md2 class="d--flex mt-1 justify-center">
+              <div class="red lighten-1 legendIcon--dimensions legendIcon--border"></div>
+              <p class="ma-0 legendIcon--text ml-1">- Stornirana faktura</p>
             </v-flex>
           </v-layout>
           <!--<v-expansion-panel-content class="listaFaktura" v-for="(faktura,index) in fakture" :key="faktura.id">
@@ -467,38 +481,32 @@ export default {
           {
             text: 'Naziv proizvoda',
             value: "usp_naziv",
-            align: 'center',
-            class: "grey lighten-2"
+            align: 'center'
           },
           {
             text: 'Proizvod/usluga',
             value: 'usp_tip',
-            align: 'center',
-            class: "grey lighten-2"
+            align: 'center'
           },
           {
             text: 'Jedinicna cena (RSD)',
             value: 'usp_cena',
-            align: 'center',
-            class: "grey lighten-2"
+            align: 'center'
           },
           {
             text: 'Jedinica mere',
             value: "usp_mera",
-            align: 'center',
-            class: "grey lighten-2"
+            align: 'center'
           },
           {
             text: 'Kolicina',
             value: 'usp_kolicina',
-            align: 'center',
-            class: "grey lighten-2"
+            align: 'center'
           },
           {
             text: 'Ukupna cena (RSD)',
             value: 'ukupno',
-            align: 'center',
-            class: "grey lighten-2"
+            align: 'center'
           }
         ],
 
@@ -621,7 +629,6 @@ export default {
           sid: localStorage.getItem('sessionid')
         }
       }).then(response => {
-
         // MENJAM FORMAT DATUMA GDE POSTOJI, KONTROLISEM DA LI POSTOJI BROJ FAKTURE I DODAJEM REDNI BROJ ZA PRVU KOLONU TABELE
         for(var i=0; i<response.data.fakture.length; i++){
           let faktura=response.data.fakture[i];
@@ -629,17 +636,19 @@ export default {
           // REDNI BROJ FAKTURE NA TABELI
           faktura.redniBroj=i+1;
           faktura.isteklaValuta=false;
+          // BOJI NACRT U CRVENO UKOLIKO JE FAKTURA ISTEKLA
           if (faktura.fak_status == 2) {
             if (new Date() >= new Date(faktura.fak_valuta)) {
               faktura.isteklaValuta = true;
-
             }
           }
-          else {
+          // MENJA DATUM IZDAVANJA FAKTURE UKOLIKO NIJE NACRT
+          if(faktura.fak_status==1 || faktura.fak_status==3) {
             // RASTAVLJAM DATUM NA OSNOVU MINUSA
             faktura.fak_datumIzdavanja = faktura.fak_datumIzdavanja.split('-');
             // ISPISUJEM DATUM U FORMATU KOJI ZELIM PREKO TRENUTNOG PRIKAZA
             faktura.fak_datumIzdavanja = faktura.fak_datumIzdavanja[2] + '.' + faktura.fak_datumIzdavanja[1] + '.' + faktura.fak_datumIzdavanja[0] + '.';
+            console.log(faktura)
           } // RASTAVLJAM DATUM NA OSNOVU MINUSA
           faktura.fak_datumPrometaIspis = faktura.fak_datumPrometa.split('-');
           // ISPISUJEM DATUM U FORMATU KOJI ZELIM PREKO TRENUTNOG PRIKAZA
@@ -796,15 +805,21 @@ export default {
         }
         this.modal2 = false;
       }
+    },
+    stampajFakturu(idFakture){
+      // UZIMAM SID IZ LOCALE STORAGE
+      let sid = localStorage.getItem('sessionid');
+      // PRAVIM ADRESU U ODGOVARAJUCEM FORMATU
+      let adresa = 'http://837s121.mars-e1.mars-hosting.com/printInvoice?sid='+sid+'&fakId='+idFakture;
+      // SALJEM NA ADRESU U NOVOM TABU
+      window.open(adresa,'_blank');
     }
   },
   mounted() {
     // PREUZIMA SVE FAKTURE
     this.preuzmiFakture();
     this.danasnjiDatum = new Date().toISOString().split('T')[0];
-
     this.datumPrometa = new Date().toISOString().split('T')[0];
-
     axios.get("http://837s121.mars-e1.mars-hosting.com/getComittents", {
       params: {
         sid: localStorage.getItem('sessionid')
@@ -817,7 +832,7 @@ export default {
       .then(response => {
         this.mesta = response.data.gradovi;
       });
-  },
+  }
 }
 </script>
 <style scoped>
@@ -946,11 +961,13 @@ th {
 }
 
 .legendIcon--dimensions{
-  height: 14px;
-  width: 14px;
+  height: 1.2rem;
+  width: 1.2rem;
 }
-
-.vertical_align{
-  vertical-align: center;
+.legendIcon--text{
+  font-size: 1rem;
+}
+.d--flex{
+  display: flex;
 }
 </style>
