@@ -5,7 +5,7 @@
   <v-form ref="form" v-model="valid" class="pa-5">
     <div v-if="novafaktura" row wrap class="forma pa-4" >
           <v-layout row wrap class="mb-1">
-            <v-flex sm3>
+            <v-flex md3>
               <v-text-field
                 v-model="search"
                 append-icon="search"
@@ -14,16 +14,16 @@
                 autofocus
               ></v-text-field>
             </v-flex>
-            <v-flex sm7>
+            <v-flex md5 lg6>
               <v-btn class="success" @click="novaFakturaDugme" v-if="novafaktura">Kreiraj novu Fakturu</v-btn>
               <v-btn @click="stampaj" color="primary">Stampaj KPO</v-btn>
             </v-flex>
-            <v-flex sm2>
-              <v-flex xs12 class="d--flex mt-1">
+            <v-flex md4 lg3>
+              <v-flex xs12 md6 class="d--flex mt-1">
                 <div class="blue lighten-1 legendIcon--dimensions legendIcon--border"></div>
                 <p class="ma-0 legendIcon--text ml-1">- Nacrt fakture</p>
               </v-flex>
-              <v-flex xs12 class="d--flex mt-1">
+              <v-flex xs12 md6 class="d--flex mt-1">
                 <div class="red lighten-1 legendIcon--dimensions legendIcon--border"></div>
                 <p class="ma-0 legendIcon--text ml-1">- Stornirana faktura</p>
               </v-flex>
@@ -45,7 +45,7 @@
                   'red lighten-1 white--text':  faktura.item.fak_status==3,
                   'red darken-1 white--text':  faktura.item.isteklaValuta
                 }"
-                @click="stampajFakturu(faktura.item)"
+                @click="otvoriFakturu(faktura.item)"
               >
                 <td>{{ faktura.item.redniBroj }}</td>
                 <td class="text-xs-center text-truncate">{{ faktura.item.kom_naziv}}</td>
@@ -59,29 +59,7 @@
                     delete
                   </v-icon>
                 </td>
-                <td v-show="false" v-for="stavka in faktura.item.stavkeFakture">{{stavka.usp_naziv}}</td>
               </tr>
-            </template>
-            <template slot="expand" slot-scope="faktura">
-              <v-data-table
-                :headers="tabeleHederi.listaStavki"
-                :items="faktura.item.stavkeFakture"
-                hide-actions class="elevation-1 forma__sirina-tabele"
-                no-data-text="Trenutno nemate fakture."
-                no-results-text="Nema rezultata."
-                rows-per-page-text="Prikazi:"
-                :rows-per-page-items="tabelaPaginacija"
-              >
-                <tr slot="items" slot-scope="stavkeFakture">
-                  <td class="text-xs-center">{{ stavkeFakture.item.usp_naziv }}</td>
-                  <td class="text-xs-center">{{ tipSelekt[stavkeFakture.item.usp_tip].tipTekst }}</td>
-                  <td class="text-xs-center">{{ stavkeFakture.item.usp_cena|thousandSeparator }}</td>
-                  <td class="text-xs-center">{{ stavkeFakture.item.usp_mera }}</td>
-                  <td class="text-xs-center">{{ stavkeFakture.item.usp_mera }}</td>
-                  <td class="text-xs-center">{{ stavkeFakture.item.usp_kolicina }}</td>
-                  <td class="text-xs-center">{{ stavkeFakture.item.ukupno | thousandSeparator }}</td>
-                </tr>
-              </v-data-table>
             </template>
             <template slot="pageText" slot-scope="props">
               Prikazujem {{ props.pageStart }} - {{ props.pageStop }} od {{ props.itemsLength }}
@@ -648,7 +626,6 @@ export default {
             faktura.fak_datumIzdavanja = faktura.fak_datumIzdavanja.split('-');
             // ISPISUJEM DATUM U FORMATU KOJI ZELIM PREKO TRENUTNOG PRIKAZA
             faktura.fak_datumIzdavanja = faktura.fak_datumIzdavanja[2] + '.' + faktura.fak_datumIzdavanja[1] + '.' + faktura.fak_datumIzdavanja[0] + '.';
-            console.log(faktura)
           } // RASTAVLJAM DATUM NA OSNOVU MINUSA
           faktura.fak_datumPrometaIspis = faktura.fak_datumPrometa.split('-');
           // ISPISUJEM DATUM U FORMATU KOJI ZELIM PREKO TRENUTNOG PRIKAZA
@@ -678,6 +655,7 @@ export default {
       this.datumValute = faktura.fak_valuta;
       this.mesto = faktura.fak_mestoPrometa;
       this.opisFakture = faktura.fak_uputstva;
+      this.idFakture=faktura.fak_id;
       this.promenljiva = 1;
       for (var j = 0; j < faktura.stavkeFakture.length; j++) {
         this.ukupno += faktura.stavkeFakture[j].usp_cena * faktura.stavkeFakture[j].usp_kolicina;
@@ -693,6 +671,14 @@ export default {
         })
       }
     },
+    stampajFakturu(faktura){
+      // UZIMAM SID IZ LOCALE STORAGE
+        let sid = localStorage.getItem('sessionid');
+        // PRAVIM ADRESU U ODGOVARAJUCEM FORMATU
+        let adresa = 'http://837s121.mars-e1.mars-hosting.com/printInvoice?sid='+sid+'&fakId='+faktura.fak_id;
+        // SALJEM NA ADRESU U NOVOM TABU
+        window.open(adresa,'_blank');
+    },
 
     fakturisiDraft(fakId) {
       axios.post("http://837s121.mars-e1.mars-hosting.com/postInvoice", {
@@ -703,6 +689,15 @@ export default {
           setTimeout(this.preuzmiFakture, 700);
       });
 
+    },
+    otvoriFakturu(faktura){
+      //PROVERAVAM STATUS FAKTURE
+      if(faktura.fak_status==1 || faktura.fak_status==3){
+        this.stampajFakturu(faktura);
+      }
+      else if(faktura.fak_status==2){
+        this.izmeniNacrt(faktura);
+      }
     },
 
 
@@ -750,8 +745,7 @@ export default {
               statusFakture: statusFakture,
               uputstva: this.opisFakture,
               komId: this.komitentId,
-              stavkeFakture: this.proizvodi,
-              fakId: this.idFakture
+              stavkeFakture: this.proizvodi
             })
             .then(response => {
               if (response.data.status) {
@@ -773,8 +767,7 @@ export default {
               statusFakture: statusFakture,
               uputstva: this.opisFakture,
               komId: this.komitentId,
-              stavkeFakture: this.proizvodi,
-              fakId: this.idFakture
+              stavkeFakture: this.proizvodi
             })
             .then(response => {
 
@@ -805,21 +798,6 @@ export default {
             });
         }
         this.modal2 = false;
-      }
-    },
-    stampajFakturu(faktura){
-      console.log(faktura)
-      //PROVERAVAM STATUS FAKTURE
-      if(faktura.fak_status==1 || faktura.fak_status==3){
-        // UZIMAM SID IZ LOCALE STORAGE
-        let sid = localStorage.getItem('sessionid');
-        // PRAVIM ADRESU U ODGOVARAJUCEM FORMATU
-        let adresa = 'http://837s121.mars-e1.mars-hosting.com/printInvoice?sid='+sid+'&fakId='+faktura.fak_id;
-        // SALJEM NA ADRESU U NOVOM TABU
-        window.open(adresa,'_blank');
-      }
-      else if(faktura.fak_status==2){
-        this.izmeniNacrt(faktura)
       }
     }
   },
