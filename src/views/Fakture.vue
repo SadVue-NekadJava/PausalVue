@@ -45,7 +45,7 @@
                   'red lighten-1 white--text':  faktura.item.fak_status==3,
                   'red darken-1 white--text':  faktura.item.isteklaValuta
                 }"
-                @click="stampajFakturu(faktura.item.fak_id)"
+                @click="stampajFakturu(faktura.item)"
               >
                 <td>{{ faktura.item.redniBroj }}</td>
                 <td class="text-xs-center text-truncate">{{ faktura.item.kom_naziv}}</td>
@@ -671,22 +671,23 @@ export default {
         this.fakture = response.data.fakture;
       });
     },
-    izmeniFakturu(index) {
+    izmeniNacrt(faktura) {
       this.novafaktura = false;
-      this.komitentId = this.fakture[index].kom_id;
-      this.datumPrometa = this.fakture[index].fak_datumPrometa;
-      this.datumValute = this.fakture[index].fak_valuta;
-      this.mesto = this.fakture[index].fak_mestoPrometa;
-      this.idFakture = this.fakture[index].fak_id;
+      this.komitentId = faktura.kom_id;
+      this.datumPrometa = faktura.fak_datumPrometa;
+      this.datumValute = faktura.fak_valuta;
+      this.mesto = faktura.fak_mestoPrometa;
+      this.opisFakture = faktura.fak_uputstva;
       this.promenljiva = 1;
-      for (var j = 0; j < this.fakture[index].stavkeFakture.length; j++) {
-        this.ukupno += this.fakture[index].stavkeFakture[j].usp_cena * this.fakture[index].stavkeFakture[j].usp_kolicina;
+      for (var j = 0; j < faktura.stavkeFakture.length; j++) {
+        this.ukupno += faktura.stavkeFakture[j].usp_cena * faktura.stavkeFakture[j].usp_kolicina;
         this.proizvodi.push({
-          naziv: this.fakture[index].stavkeFakture[j].usp_naziv,
-          cena: this.fakture[index].stavkeFakture[j].usp_cena,
-          mera: this.fakture[index].stavkeFakture[j].usp_mera,
-          kolicina: this.fakture[index].stavkeFakture[j].usp_kolicina,
-          ukupnaCena: this.fakture[index].stavkeFakture[j].usp_cena * this.fakture[index].stavkeFakture[j].usp_kolicina
+          naziv: faktura.stavkeFakture[j].usp_naziv,
+          cena: faktura.stavkeFakture[j].usp_cena,
+          mera: faktura.stavkeFakture[j].usp_mera,
+          kolicina: faktura.stavkeFakture[j].usp_kolicina,
+          ukupnaCena: faktura.stavkeFakture[j].usp_cena * faktura.stavkeFakture[j].usp_kolicina,
+          tip: faktura.stavkeFakture[j].usp_tip
 
 
         })
@@ -806,13 +807,20 @@ export default {
         this.modal2 = false;
       }
     },
-    stampajFakturu(idFakture){
-      // UZIMAM SID IZ LOCALE STORAGE
-      let sid = localStorage.getItem('sessionid');
-      // PRAVIM ADRESU U ODGOVARAJUCEM FORMATU
-      let adresa = 'http://837s121.mars-e1.mars-hosting.com/printInvoice?sid='+sid+'&fakId='+idFakture;
-      // SALJEM NA ADRESU U NOVOM TABU
-      window.open(adresa,'_blank');
+    stampajFakturu(faktura){
+      console.log(faktura)
+      //PROVERAVAM STATUS FAKTURE
+      if(faktura.fak_status==1 || faktura.fak_status==3){
+        // UZIMAM SID IZ LOCALE STORAGE
+        let sid = localStorage.getItem('sessionid');
+        // PRAVIM ADRESU U ODGOVARAJUCEM FORMATU
+        let adresa = 'http://837s121.mars-e1.mars-hosting.com/printInvoice?sid='+sid+'&fakId='+faktura.fak_id;
+        // SALJEM NA ADRESU U NOVOM TABU
+        window.open(adresa,'_blank');
+      }
+      else if(faktura.fak_status==2){
+        this.izmeniNacrt(faktura)
+      }
     }
   },
   mounted() {
