@@ -35,15 +35,44 @@
         </v-flex>
       </v-layout>
       <v-form v-if="kreirajNovog" ref="form" v-model="valid" class=" pt-2 pb-5 pr-5 pl-5">
-        <v-text-field v-model="komImeFirme" :rules="obaveznoPoljeRules" label="Ime Firme"></v-text-field>
-        <v-text-field v-model="komPunNaziv" :rules="obaveznoPoljeRules" label="Pun naziv sa resenja"></v-text-field>
-        <v-text-field v-model="komPib" mask="#########" :counter="9" :rules="pibRules" label="Pib"></v-text-field>
-        <v-text-field v-model="komRacun" :rules="obaveznoPoljeRules" mask="###-#############-##" label="Broj Ziro racuna"></v-text-field>
-        <v-select :items="gradovi" :rules="obaveznoPoljeRules" name="grad" item-text="gra_naziv" item-value="gra_id" v-model="komGrad" @change="spisakOpstina($event)" label="Izaberite grad"></v-select>
-        <v-select :items="komOpstine" :rules="obaveznoPoljeRules" name="opstina" item-text="ops_naziv" item-value="ops_id" v-model="komOpstina" label="Izaberite opstinu"></v-select>
-        <v-text-field v-model="komAdresa" :rules="obaveznoPoljeRules" label="Adresa"></v-text-field>
-        <v-text-field v-model="komEmail" label="E-mail"></v-text-field>
-        <v-text-field v-model="komTelefon" mask="+(###)##-###-######" label="Telefon"></v-text-field>
+        <v-layout row wrap>
+          <v-flex xs8 offset-xs2>
+            <v-text-field v-model="komImeFirme" :rules="obaveznoPoljeRules" label="Ime Firme"></v-text-field>
+            <v-text-field v-model="komPunNaziv" :rules="obaveznoPoljeRules" label="Pun naziv sa resenja"></v-text-field>
+            <v-layout row wrap>
+              <v-flex xs8>
+                <v-text-field v-model="komPib" mask="#########" :counter="9" :rules="pibRules" label="Pib"></v-text-field>
+                <v-text-field v-model="komRacun" :rules="obaveznoPoljeRules" mask="###-#############-##" label="Broj Ziro racuna"></v-text-field>
+              </v-flex>
+              <v-layout row wrap>
+                <v-flex xs6>
+                  <v-select :items="gradovi" :rules="obaveznoPoljeRules" name="grad" item-text="gra_naziv" item-value="gra_id" v-model="komGrad" @change="spisakOpstina($event)" label="Izaberite grad"></v-select>
+                  <v-select :items="komOpstine" :rules="obaveznoPoljeRules" name="opstina" item-text="ops_naziv" item-value="ops_id" v-model="komOpstina" label="Izaberite opstinu"></v-select>
+                </v-flex>
+
+              </v-layout>
+              <v-flex xs8>
+                <v-text-field v-model="komEmail" label="E-mail"></v-text-field>
+              </v-flex>
+
+
+
+            </v-layout>
+
+
+
+            <v-text-field v-model="komAdresa" :rules="obaveznoPoljeRules" label="Adresa"></v-text-field>
+                <v-layout row wrap>
+                  <v-flex xs6>
+                    <v-text-field v-model="komTelefon" mask="+(###)##-###-######" label="Telefon"></v-text-field>
+                  </v-flex>
+
+                </v-layout>
+
+          </v-flex>
+
+        </v-layout>
+
 
         <v-btn :disabled="!valid" color="success" @click="sacuvajNovogKomitenta">
           Sacuvaj
@@ -103,13 +132,11 @@
               autofocus
             ></v-text-field>
           </v-flex>
-          <v-layout align-center justify-center row wrap>
 
             <v-btn @click="kreiranjeNovog"
              v-if="!kreirajNovog"
              color="success"
-              class="mb-4 mt-4">Dodaj novog komitenta</v-btn>
-          </v-layout>
+            >Dodaj novog komitenta</v-btn>
         </v-layout>
 
         <v-data-table

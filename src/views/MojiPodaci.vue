@@ -31,46 +31,50 @@
         <v-flex>
           <v-form refs="form" v-model="valid">
             <v-layout class="pt-4" row wrap>
-              <v-flex xs4>
+              <v-flex xs12 sm4>
                 <h3>Ime i prezime</h3>
               </v-flex>
               <v-flex class="pa-4" hidden-sm-and-up xs9>
               </v-flex>
-              <v-flex xs7 v-if="izmenaPodataka">
+              <v-flex xs12 sm7 v-if="izmenaPodataka">
                 <h3 class="podaci">{{ime}} {{prezime}}</h3>
               </v-flex>
-              <v-flex xs7 v-else>
+              <v-flex xs12 sm7 v-else>
                 <v-layout row wrap>
 
 
-                <v-flex xs2>
+                <v-flex xs4>
                 <v-text-field class="podaciIzmena pr-2 pa-0" v-model="ime" :rules="obaveznoPoljeRules"></v-text-field>
 </v-flex>
 
-<v-flex xs2>
+<v-flex xs8 sm6 md8>
                 <v-text-field class="podaciIzmena pa-0" v-model="prezime" :rules="obaveznoPoljeRules"></v-text-field>
               </v-flex>
 </v-layout>
               </v-flex>
             </v-layout>
             <v-layout class="pt-4" row wrap>
-              <v-flex xs4>
+              <v-flex xs12 sm4>
                 <h3>Ime roditelja</h3>
               </v-flex>
               <v-flex class="pa-4" hidden-sm-and-up xs9>
               </v-flex>
-              <v-flex xs2>
-                <h3 v-if="izmenaPodataka" class="podaci">{{imeRoditelja}}</h3>
-                <v-text-field v-else class="podaciIzmena pa-0" v-model="imeRoditelja" :rules="obaveznoPoljeRules"></v-text-field>
+              <v-flex xs12 sm7>
+                <v-layout row wrap>
+                  <v-flex xs4>
+                    <h3 v-if="izmenaPodataka" class="podaci">{{imeRoditelja}}</h3>
+                    <v-text-field v-else class="podaciIzmena pr-2 pa-0" v-model="imeRoditelja" :rules="obaveznoPoljeRules"></v-text-field>
+                  </v-flex>
+                </v-layout>
               </v-flex>
             </v-layout>
             <v-layout class="pt-4" row wrap>
               <v-flex xs4>
                 <h3>Jmbg</h3>
               </v-flex>
-              <v-flex class="pa-4" hidden-sm-and-up xs9>
+              <v-flex class="pa-4" hidden-sm-and-up xs7>
               </v-flex>
-              <v-flex xs2>
+              <v-flex xs9 sm6>
                 <h3 v-if="izmenaPodataka" class="podaci">{{jmbg}}</h3>
                 <v-text-field v-else class="podaciIzmena pa-0" v-model="jmbg" mask="#############" :rules="obaveznoPoljeRules"></v-text-field>
               </v-flex>
@@ -81,7 +85,7 @@
               </v-flex>
               <v-flex class="pa-4" hidden-sm-and-up xs9>
               </v-flex>
-              <v-flex xs1>
+              <v-flex xs2>
                 <h3 v-if="izmenaPodataka" class="podaci">{{strucnaSprema}}</h3>
                 <v-text-field v-else class="podaciIzmena pa-0" v-model="strucnaSprema" :rules="obaveznoPoljeRules"></v-text-field>
               </v-flex>
