@@ -65,16 +65,6 @@
               Prikazujem {{ props.pageStart }} - {{ props.pageStop }} od {{ props.itemsLength }}
             </template>
           </v-data-table>
-          <v-layout row wrap justify-end>
-            <v-flex xs12 md2 class="d--flex mt-1 justify-center">
-              <div class="blue lighten-1 legendIcon--dimensions legendIcon--border"></div>
-              <p class="ma-0 legendIcon--text ml-1">- Nacrt fakture</p>
-            </v-flex>
-            <v-flex xs12 md2 class="d--flex mt-1 justify-center">
-              <div class="red lighten-1 legendIcon--dimensions legendIcon--border"></div>
-              <p class="ma-0 legendIcon--text ml-1">- Stornirana faktura</p>
-            </v-flex>
-          </v-layout>
           <!--<v-expansion-panel-content class="listaFaktura" v-for="(faktura,index) in fakture" :key="faktura.id">
             <div slot="header">
               <v-layout row wrap>
